@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { Check2Square, Check2, Trash, ArrowRepeat } from 'react-bootstrap-icons';
+import axios from 'axios';
 
 export default class CheckList extends Component {
     constructor(props, context) {
@@ -21,6 +22,19 @@ export default class CheckList extends Component {
                 complete: false
             }],
         };
+    }
+
+    componentDidMount() {
+        this.loadItems();
+    }
+
+    loadItems() {
+        axios.post(`/user/items`)
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+        })
+        .catch(e => console.log(e));
     }
 
     completeItem(item) {
