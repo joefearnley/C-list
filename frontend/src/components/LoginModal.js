@@ -53,8 +53,8 @@ export default class LoginModal extends Component {
     render() {
         return (
             <div>
-                <p class="aleady-a-user">
-                    Already a user? <a href="/signin" class="sign-in" onClick={this.handleShow}> Sign in</a>
+                <p className="aleady-a-user">
+                    Already a user? <a href="/signin" className="sign-in" onClick={this.handleShow}> Sign in</a>
                 </p>
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
