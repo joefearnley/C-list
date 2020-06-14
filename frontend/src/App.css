@@ -32,11 +32,14 @@
     border-top: 0;
 }
 
-
 .checklist h2 {
     color: #fff;
 }
 
 .row {
     margin: 30px 0;
+}
+
+.list-group-item {
+    line-height: 3;
 }

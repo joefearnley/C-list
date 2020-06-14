@@ -5,10 +5,10 @@ export default class Navigation extends Component {
     render() {
         return (
             <Navbar>
-                <Navbar href="/">
+                <Navbar.Brand href="/">
                     CheckList
-                </Navbar>
+                </Navbar.Brand>
             </Navbar>
-        )
-    }
+)
+        }
 }
