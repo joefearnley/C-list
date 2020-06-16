@@ -7,7 +7,7 @@ from django.conf import settings
 class Item(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField(blank=True)
-    complete = models.BooleanField(initial=False)
+    complete = models.BooleanField(default=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
