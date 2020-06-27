@@ -17,7 +17,7 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         model = Item
         fields = ['title', 'description', 'user', 'due_date', 'created', 'updated']
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class AuthSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'groups']
+        fields = ['username', 'password']

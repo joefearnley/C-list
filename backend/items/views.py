@@ -28,9 +28,6 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
-class HelloView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        content = {'message': 'Hello, World!'}
-        return Response(content)
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all().order_by('-created')
+    serializer_class = ItemSerializer
