@@ -13,8 +13,11 @@ export default class LoginModal extends Component {
 
         this.state = {
             show: false,
+            username: '',
             email: '',
-            password: ''
+            password: '',
+            showError: '',
+            error: ''
         };
     }
 
@@ -27,6 +30,10 @@ export default class LoginModal extends Component {
         this.setState({ show: true });
     }
 
+    updateUsername = e => {
+        this.setState({ username: e.target.value });
+    }
+
     updateEmail = e => {
         this.setState({ email: e.target.value });
     }
@@ -37,17 +44,25 @@ export default class LoginModal extends Component {
 
     submitForm = e => {
         e.preventDefault();
+        this.state.showError = false;
 
         const credentials = {
-            email: this.state.email,
+            username: this.state.username,
             password: this.state.password
         };
 
-        axios.post(`/user/login`, { credentials })
-        .then(res => {
-            console.log(res);
-            console.log(res.data);
-        });
+        console.log(credentials);
+
+        axios.post(`http://127.0.0.1:8000/rest-auth/login/`, { credentials })
+          .then(res => {
+              console.log(res);
+              console.log(res.data);
+          })
+          .catch(err => {
+            if (err.response) {
+                this.setState(() => ({ showError: true }));
+            }
+          });
     }
 
     render() {
@@ -58,19 +73,22 @@ export default class LoginModal extends Component {
                 </p>
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Sign In</Modal.Title>
+                        <Modal.Title>Log In</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control type="email" placeholder="Enter email" onChange={this.updateEmail} />
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control type="text" onChange={this.updateUsername} />
+                                <Form.Control.Feedback type="invalid">Please enter Username</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group controlId="formBasicPassword">
                                 <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" placeholder="Password" onChange={this.updatePassword} />
+                                <Form.Control type="password" onChange={this.updatePassword} />
+                                <Form.Control.Feedback type="invalid">Please enter password</Form.Control.Feedback>
                             </Form.Group>
                         </Form>
+                        <p className={this.state.showError ? 'show-error' : 'hide-error'}>Your Username and Password do not match. Please try again.</p>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={this.submitForm}>Sign in</Button>

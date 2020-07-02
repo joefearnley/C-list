@@ -5,6 +5,7 @@ from items.serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -28,6 +29,10 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
-class ItemViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all().order_by('-created')
-    serializer_class = ItemSerializer
+class AuthenticateView(APIView):
+    def post(self, request,format=None):
+        data = {
+            'username': request.user.username,
+            'password':request.user.password,
+        }
+        return Response(data)
