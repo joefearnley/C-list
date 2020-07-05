@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
+import Config from "../config";
 
 export default class LoginModal extends Component {
     constructor(props, context) {
@@ -44,19 +45,16 @@ export default class LoginModal extends Component {
 
     submitForm = e => {
         e.preventDefault();
-        this.state.showError = false;
+        this.setState({ showError: false });
 
-        const credentials = {
+        axios.post(`${Config.API_AUTH_URL}/login/`, {
             username: this.state.username,
             password: this.state.password
-        };
-
-        console.log(credentials);
-
-        axios.post(`http://127.0.0.1:8000/rest-auth/login/`, { credentials })
+        })
           .then(res => {
-              console.log(res);
-              console.log(res.data);
+            // do something sith the token
+            // 
+            //  redirect to the account's list
           })
           .catch(err => {
             if (err.response) {
@@ -77,7 +75,7 @@ export default class LoginModal extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                            <Form.Group controlId="formBasicEmail">
+                            <Form.Group controlId="formBasicUsername">
                                 <Form.Label>Username</Form.Label>
                                 <Form.Control type="text" onChange={this.updateUsername} />
                                 <Form.Control.Feedback type="invalid">Please enter Username</Form.Control.Feedback>
