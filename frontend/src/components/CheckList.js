@@ -30,11 +30,11 @@ export default class CheckList extends Component {
 
     loadItems() {
         axios.post(`/user/items`)
-        .then(res => {
-            console.log(res);
-            console.log(res.data);
-        })
-        .catch(e => console.log(e));
+            .then(res => {
+                console.log('fetching account items....');
+                this.setState({ items: res.data });
+            })
+            .catch(e => console.log(e));
     }
 
     completeItem(item) {

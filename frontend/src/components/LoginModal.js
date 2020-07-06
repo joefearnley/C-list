@@ -18,8 +18,7 @@ class LoginModal extends Component {
             username: '',
             email: '',
             password: '',
-            showError: '',
-            error: ''
+            showError: ''
         };
     }
 
@@ -56,8 +55,6 @@ class LoginModal extends Component {
         .then(res => {
             // do something sith the token
             // 
-            //  redirect to the account's list
-             // history.push("/list");
              this.props.history.push('/list');
           })
           .catch(err => {
