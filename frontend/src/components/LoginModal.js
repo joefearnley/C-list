@@ -4,8 +4,9 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Config from "../config";
+import { withRouter } from 'react-router';
 
-export default class LoginModal extends Component {
+class LoginModal extends Component {
     constructor(props, context) {
         super(props, context);
 
@@ -46,15 +47,18 @@ export default class LoginModal extends Component {
     submitForm = e => {
         e.preventDefault();
         this.setState({ showError: false });
+        // let history = useHistory();
 
         axios.post(`${Config.API_AUTH_URL}/login/`, {
             username: this.state.username,
             password: this.state.password
         })
-          .then(res => {
+        .then(res => {
             // do something sith the token
             // 
             //  redirect to the account's list
+             // history.push("/list");
+             this.props.history.push('/list');
           })
           .catch(err => {
             if (err.response) {
@@ -97,3 +101,5 @@ export default class LoginModal extends Component {
         );
     }
 }
+
+export default withRouter(LoginModal);
