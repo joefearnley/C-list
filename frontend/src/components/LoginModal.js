@@ -46,7 +46,6 @@ class LoginModal extends Component {
     submitForm = e => {
         e.preventDefault();
         this.setState({ showError: false });
-        // let history = useHistory();
 
         axios.post(`${Config.API_AUTH_URL}/login/`, {
             username: this.state.username,
@@ -76,12 +75,12 @@ class LoginModal extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                            <Form.Group controlId="formBasicUsername">
+                            <Form.Group controlId="formUsername">
                                 <Form.Label>Username</Form.Label>
                                 <Form.Control type="text" onChange={this.updateUsername} />
                                 <Form.Control.Feedback type="invalid">Please enter Username</Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group controlId="formBasicPassword">
+                            <Form.Group controlId="formPassword">
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control type="password" onChange={this.updatePassword} />
                                 <Form.Control.Feedback type="invalid">Please enter password</Form.Control.Feedback>

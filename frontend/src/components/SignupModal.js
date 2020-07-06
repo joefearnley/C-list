@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import axios from 'axios';
+import Config from "../config";
+import { withRouter } from 'react-router';
 
-export default class SignupModal extends Component {
+class SignupModal extends Component {
     constructor(props, context) {
         super(props, context);
 
@@ -11,17 +14,57 @@ export default class SignupModal extends Component {
         this.handleClose = this.handleClose.bind(this);
 
         this.state = {
-            show: false,
+            username: '',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
+            show: false
         };
     }
 
-    handleClose() {
+    handleClose = () => {
         this.setState({ show: false });
     }
 
-    handleShow(e) {
+    handleShow = e => {
         e.preventDefault();
         this.setState({ show: true });
+    }
+
+    updateUsername = e => {
+        this.setState({ username: e.target.value });
+    }
+
+    updateEmail = e => {
+        this.setState({ email: e.target.value });
+    }
+
+    updatePassword = e => {
+        this.setState({ password: e.target.value });
+    }
+
+    updatePasswordConfirmation = e => {
+        this.setState({ passwordConfirmation: e.target.value });
+    }
+
+    submitForm = e => {
+        e.preventDefault();
+        this.setState({ showError: false });
+
+        axios.post(`${Config.API_AUTH_URL}/registration/`, {
+            username: this.state.username,
+            email: this.state.email,
+            password1: this.state.password,
+            password2: this.state.passwordConfirmation
+        })
+        .then(res => {
+             this.props.history.push('/list');
+          })
+          .catch(err => {
+            if (err.response) {
+                this.setState(() => ({ showError: true }));
+            }
+          });
     }
 
     render() {
@@ -34,19 +77,29 @@ export default class SignupModal extends Component {
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control type="email" placeholder="Enter email address" />
-                                <Form.Text className="text-muted">We will never share your email with anyone else.</Form.Text>
+                            <Form.Group controlId="formUsername">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control type="email" onChange={this.updateUsername} />
+                                <Form.Text className="d-none text-danger">Username has already been taken.</Form.Text>
                             </Form.Group>
-                            <Form.Group controlId="formBasicPassword">
+                            <Form.Group controlId="formEmail">
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control type="email" onChange={this.updateEmail} />
+                                <Form.Text className="d-none text-danger">Please enter valid email address.</Form.Text>
+                            </Form.Group>
+                            <Form.Group controlId="formPassword">
                                 <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" placeholder="Enter password" />
+                                <Form.Control type="password" onChange={this.updatePassword} />
+                            </Form.Group>
+                            <Form.Group controlId="formConfirmPassword">
+                                <Form.Label>Confirm Password</Form.Label>
+                                <Form.Control type="password"  onChange={this.updatePasswordConfirmation}/>
+                                <Form.Text className="d-none text-danger">Passwords do not match.</Form.Text>
                             </Form.Group>
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={this.handleClose}>Creact Account</Button>
+                        <Button variant="primary" onClick={this.submitForm}>Creact Account</Button>
                         <Button variant="secondary" onClick={this.handleClose}>Cancel</Button>
                     </Modal.Footer>
                 </Modal>
@@ -54,3 +107,5 @@ export default class SignupModal extends Component {
         );
     }
 }
+
+export default withRouter(SignupModal);
