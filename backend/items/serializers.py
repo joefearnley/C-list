@@ -3,9 +3,11 @@ from items.models import Item
 from rest_framework import serializers
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    items = serializers.StringRelatedField(many=True, read_only=False)
+
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'groups']
+        fields = ['url', 'username', 'email', 'groups', 'items']
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

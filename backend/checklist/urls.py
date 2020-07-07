@@ -16,7 +16,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
 ]
 
