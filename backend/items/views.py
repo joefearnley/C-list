@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from items.serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
@@ -29,3 +30,9 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
+class ItemListView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, format=None):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)

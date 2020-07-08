@@ -12,15 +12,7 @@ export default class CheckList extends Component {
         this.deleteItem = this.deleteItem.bind(this);
 
         this.state = {
-            items: [{
-                title: 'Test',
-                description: 'This is a test',
-                complete: true
-            },{
-                title: 'Test 2',
-                description: 'This is a test',
-                complete: false
-            }],
+            items: []
         };
     }
 
@@ -29,12 +21,17 @@ export default class CheckList extends Component {
     }
 
     loadItems() {
-        axios.post(`/user/items`)
-            .then(res => {
-                console.log('fetching account items....');
-                this.setState({ items: res.data });
-            })
-            .catch(e => console.log(e));
+        const headers = {
+            'Authorization': `Token ${localStorage.getItem('token')}`
+        };
+
+        axios.get(`/users/`, { headers })
+        .then(res => {
+            console.log('fetching user items....');
+            console.log(res.data);
+            this.setState({ items: res.data });
+        })
+        .catch(e => console.log(e));
     }
 
     completeItem(item) {
@@ -73,8 +70,11 @@ export default class CheckList extends Component {
             <div className="checklist">
                 <Container>
                     <Row className="justify-content-md-center">
-                        <Col md="auto">
+                        <Col sm="auto">
                             <h2>Your CheckList <Check2Square /></h2>
+                        </Col>
+                        <Col sm="auto">
+                            <p><a href="/logout">Logout</a></p>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">

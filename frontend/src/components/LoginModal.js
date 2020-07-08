@@ -52,15 +52,14 @@ class LoginModal extends Component {
             password: this.state.password
         })
         .then(res => {
-            // do something sith the token
-            // 
-             this.props.history.push('/list');
-          })
-          .catch(err => {
+            localStorage.setItem('token', res.data.key);
+            this.props.history.push('/list');
+        })
+        .catch(err => {
             if (err.response) {
                 this.setState(() => ({ showError: true }));
             }
-          });
+        });
     }
 
     render() {
