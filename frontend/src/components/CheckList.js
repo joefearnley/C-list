@@ -21,11 +21,7 @@ export default class CheckList extends Component {
     }
 
     loadItems() {
-        const headers = {
-            'Authorization': `Token ${localStorage.getItem('token')}`
-        };
-
-        axios.get(`/users/`, { headers })
+        axios.get(`/users/`)
         .then(res => {
             console.log('fetching user items....');
             console.log(res.data);
