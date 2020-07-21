@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { Check2Square, Check2, Trash, ArrowRepeat } from 'react-bootstrap-icons';
-import axios from 'axios';
+import api from '../api';
+import Config from "../config";
 
 export default class CheckList extends Component {
     constructor(props, context) {
@@ -21,11 +22,10 @@ export default class CheckList extends Component {
     }
 
     loadItems() {
-        axios.get(`/users/`)
+        api.get(`${Config.API_URL}/checklist`)
         .then(res => {
-            console.log('fetching user items....');
-            console.log(res.data);
-            this.setState({ items: res.data });
+            localStorage.setItem('token', null);
+            this.props.history.push('/');
         })
         .catch(e => console.log(e));
     }
@@ -45,15 +45,29 @@ export default class CheckList extends Component {
         console.log(item);
     }
 
+    logout() {
+        api.post(`${Config.API_AUTH_URL}/logout/`)
+            .then(res => {
+                this.props.history.push('/');
+            })
+            .catch(e => console.log(e));
+    }
+
+    renderActions(item) {
+        if (item.complete) {
+            return ( <Button variant="default" onClick={() => this.unCompleteItem(item)}><ArrowRepeat /></Button> );
+        }
+
+        return ( <Button variant="default" onClick={() => this.completeItem(item)}><Check2 /></Button> );
+    }
+
     renderItems() {
         return this.state.items.map((item, i) => {
             return (
                     <ListGroup.Item key={i}>
                         { item.title }
                         <span className="float-right">
-                            {item.complete
-                                ? <Button variant="default" onClick={() => this.completeItem(item)}><Check2 /></Button>
-                                : <Button variant="default" onClick={() => this.unCompleteItem(item)}><ArrowRepeat  /></Button>}
+                            { this.renderActions(item) }
                             <Button variant="default" onClick={() => this.deleteItem(item)}><Trash /></Button>
                         </span>
                     </ListGroup.Item>
@@ -66,15 +80,15 @@ export default class CheckList extends Component {
             <div className="checklist">
                 <Container>
                     <Row className="justify-content-md-center">
-                        <Col sm="auto">
+                        <Col lg="auto">
                             <h2>Your CheckList <Check2Square /></h2>
                         </Col>
-                        <Col sm="auto">
-                            <p><a href="/logout">Logout</a></p>
+                        <Col lg="auto">
+                            <p><Button variant="link" onClick={() => this.logout()}>Logout</Button></p>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
-                        <Col md="auto">
+                        <Col lg="auto">
                             <ListGroup>
                                 { this.renderItems() }
                             </ListGroup>

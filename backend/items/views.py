@@ -9,30 +9,23 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows items to be viewed or edited.
-    """
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
-class ItemListView(APIView):
+class UserItemListView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
+    # serializer_class = ItemSerializer
 
     def get(self, request, format=None):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        items = Item.objects.filter(user=request.user).order_by('-created')
+        # serializer = UserSerializer(data=request.user)
+        return Response({"items": items})
