@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
-import { Check2Square, Check2, Trash, ArrowRepeat } from 'react-bootstrap-icons';
+import { Check2Square, Check2, Trash, ArrowRepeat, Plus } from 'react-bootstrap-icons';
 import api from '../api';
 import Config from "../config";
 
@@ -80,15 +80,22 @@ export default class CheckList extends Component {
             <div className="checklist">
                 <Container>
                     <Row className="justify-content-md-center">
-                        <Col lg="auto">
+                        <Col md>
                             <h2>Your CheckList <Check2Square /></h2>
                         </Col>
-                        <Col lg="auto">
-                            <p><Button variant="link" onClick={() => this.logout()}>Logout</Button></p>
+                        <Col md>
+                            <Row>
+                                <Col md>
+                                    <p><Button variant="link" onClick={() => this.showAddItem()}><Plus /></Button></p>
+                                </Col>
+                                <Col md>
+                                    <p><Button variant="link" onClick={() => this.logout()}>Logout</Button></p>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
-                        <Col lg="auto">
+                        <Col lg>
                             <ListGroup>
                                 { this.renderItems() }
                             </ListGroup>
