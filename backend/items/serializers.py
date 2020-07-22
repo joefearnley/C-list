@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from items.models import Item
 from rest_framework import serializers
 
-class ItemSerializer(serializers.HyperlinkedModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['title', 'description', 'complete', 'due_date', 'created', 'updated', 'user']

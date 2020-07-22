@@ -23,11 +23,10 @@ export default class CheckList extends Component {
 
     loadItems() {
         api.get(`${Config.API_URL}/checklist`)
-        .then(res => {
-            localStorage.setItem('token', null);
-            this.props.history.push('/');
-        })
-        .catch(e => console.log(e));
+            .then(res => {
+                this.setState({ items: res.data });
+            })
+            .catch(e => console.log(e));
     }
 
     completeItem(item) {
@@ -48,9 +47,10 @@ export default class CheckList extends Component {
     logout() {
         api.post(`${Config.API_AUTH_URL}/logout/`)
             .then(res => {
+                localStorage.setItem('token', null);
                 this.props.history.push('/');
             })
-            .catch(e => console.log(e));
+            .catch(e => console.log(e));    
     }
 
     renderActions(item) {

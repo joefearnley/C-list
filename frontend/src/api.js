@@ -8,21 +8,14 @@ const defaultOptions = {
     }
 };
 
-
 let instance = axios.create(defaultOptions);
 instance.interceptors.request.use(config => {
         const token = localStorage.getItem('token');
-        console.log('getting token...');
-        console.log(token);
-
         config.headers.Authorization =  token ? `Token ${token}` : null;
         return config;
     },
     error => {
-        console.log('error!!!!!!');
-        console.log('error------------');
-
         return Promise.reject(error);
-});
+    });
 
 export default instance;
