@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.test import TestCase
+from django.test import TestCase, Client
 from rest_framework.test import RequestsClient
+from django.contrib.auth.models import User
+from ..models import Item
 
-client = RequestsClient()
-response = client.get('http://localhost:8000')
-assert response.status_code == 404
+
+
+class ItemListTest(Api):
+    
+    def setUp(self):
+        

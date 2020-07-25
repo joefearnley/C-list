@@ -80,18 +80,14 @@ export default class CheckList extends Component {
             <div className="checklist">
                 <Container>
                     <Row className="justify-content-md-center">
-                        <Col md>
+                        <Col md="10">
                             <h2>Your CheckList <Check2Square /></h2>
                         </Col>
-                        <Col md>
-                            <Row>
-                                <Col md>
-                                    <p><Button variant="link" onClick={() => this.showAddItem()}><Plus /></Button></p>
-                                </Col>
-                                <Col md>
-                                    <p><Button variant="link" onClick={() => this.logout()}>Logout</Button></p>
-                                </Col>
-                            </Row>
+                        <Col md="1">
+                            <p><Button variant="light" onClick={() => this.showAddItem()}><Plus /></Button></p>
+                        </Col>
+                        <Col md="1">
+                            <p><Button variant="link" onClick={() => this.logout()}>Logout</Button></p>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
