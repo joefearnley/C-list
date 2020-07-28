@@ -31,3 +31,15 @@ class UserItemList(generics.ListCreateAPIView):
         queryset = self.get_queryset().filter(user=request.user).order_by('-created')
         serializer = ItemSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def get(self, request):
+        return Response({})
+
+    def put(self, request):
+        return Response({})
+
+    def patch(self, request):
+        return Response({})
+
+    def destroy(self, request):
+        return Response({})
