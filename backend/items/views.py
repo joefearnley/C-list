@@ -22,7 +22,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
-class UserItemList(generics.ListCreateAPIView):
+class UserCheckList(generics.RetrieveUpdateDestroyAPIView):
     queryset = Item.objects.all()
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ItemSerializer
@@ -41,5 +41,5 @@ class UserItemList(generics.ListCreateAPIView):
     def patch(self, request):
         return Response({})
 
-    def destroy(self, request):
+    def delete(self, request):
         return Response({})

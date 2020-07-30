@@ -14,7 +14,7 @@ router.register(r'groups', views.GroupViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
-    path('api/v1/checklist', views.UserItemList.as_view(), name='UserItemList'),
+    path('api/v1/checklist/', views.UserCheckList.as_view(), name='CheckList'),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
 ]

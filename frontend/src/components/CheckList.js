@@ -22,8 +22,10 @@ export default class CheckList extends Component {
     }
 
     loadItems() {
-        api.get(`${Config.API_URL}/checklist`)
+        api.get(`${Config.API_URL}/checklist/`)
             .then(res => {
+                console.log(res);
+
                 this.setState({ items: res.data });
             })
             .catch(e => console.log(e));
