@@ -10,7 +10,7 @@ import datetime
 
 class ItemListTest(APITestCase):
     def setUp(self):
-        self.client = APIClient()
+        # self.client = APIClient()
         self.username = 'joe'
         self.password = 'secret'
         self.user = User.objects.create(username=self.username, password=self.password)
