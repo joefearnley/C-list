@@ -67,6 +67,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000'
 ]
 
+TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
+
 
 ROOT_URLCONF = 'checklist.urls'
 

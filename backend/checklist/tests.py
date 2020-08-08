@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import RequestsClient
@@ -9,7 +10,7 @@ import datetime
 
 class ItemListTest(APITestCase):
     def setUp(self):
-        # self.client = APIClient()
+        self.client = APIClient()
         self.username = 'joe'
         self.password = 'secret'
         self.user = User.objects.create(username=self.username, password=self.password)
@@ -20,11 +21,18 @@ class ItemListTest(APITestCase):
 
     def test_cannot_view_checklist_if_not_logged_in(self):
         response = self.client.get('/api/v1/checklist/')
-        assert response.status_code == 401
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_can_view_checklist_if_not_logged_in(self):
-        token = Token.objects.get(user__username='joe')
-        # self.client.force_authenticate(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = self.client.get('/api/v1/checklist/')
-        assert response.status_code == 200
+#        token = Token.objects.get(username='joe')
+        login_response = self.client.post('/rest-auth/login/', {
+            'username': self.username,
+            'password': self.password
+        })
+
+        self.assertEqual(login_response.status_code, status.HTTP_200_OK)
+
+        # # self.client.force_authenticate(user=self.user)
+        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        # response = self.client.get('/api/v1/checklist/')
+        # assert response.status_code == 200
