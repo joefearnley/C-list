@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('api/v1/checklist/', views.UserCheckList.as_view(), name='CheckList'),
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
+    path('api/v1/token-auth/', obtain_auth_token, name='token_auth'),
 ]
 

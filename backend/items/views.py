@@ -23,8 +23,8 @@ class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
 
 class UserCheckList(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Item.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ItemSerializer
 
     def list(self, request):

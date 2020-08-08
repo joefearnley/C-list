@@ -19,18 +19,31 @@ class ItemListTest(APITestCase):
         Item.objects.create(title='Clean Pool', description='Clean the Pool', user=self.user, due_date=due_date)
         Item.objects.create(title='Clean Bathroom', description='Clean the Bathroom', user=self.user, due_date=due_date)
 
-    def test_cannot_view_checklist_if_not_logged_in(self):
-        response = self.client.get('/api/v1/checklist/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_can_view_checklist_if_not_logged_in(self):
-#        token = Token.objects.get(username='joe')
-        login_response = self.client.post('/rest-auth/login/', {
+    def test_token_auth_returns_token(self):
+        response = self.client.post('/api/v1/token-auth/', {
             'username': self.username,
             'password': self.password
-        })
+        }, format='json')
 
-        self.assertEqual(login_response.status_code, status.HTTP_200_OK)
+        print(response)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    # def test_cannot_view_checklist_if_not_logged_in(self):
+    #     response = self.client.get('/api/v1/checklist/')
+    #     self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    # def test_can_view_checklist_if_logged_in(self):
+#        token = Token.objects.get(username='joe')
+        # login_response = self.client.post('/rest-auth/login/', {
+        #     'username': self.username,
+        #     'password': self.password
+        # })
+
+        # self.client.login(username=self.user.username, password=self.user.password)
+
+        # response = self.client.get('/api/v1/checklist/')
+        # self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # # self.client.force_authenticate(user=self.user)
         # self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
