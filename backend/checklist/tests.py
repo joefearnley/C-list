@@ -67,7 +67,7 @@ class ItemListTest(APITestCase):
         Item.objects.create(title='Clean Bathroom', description='Clean the Bathroom', user=self.user, due_date=due_date)
 
     def test_cannot_view_checklist_if_not_logged_in(self):
-        response = self.client.get('/api/v1/checklist/')
+        response = self.client.get('/api/v1/items/')
         
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -75,6 +75,69 @@ class ItemListTest(APITestCase):
         self.client.force_authenticate(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         
-        response = self.client.get('/api/v1/checklist/')
-        
+        response = self.client.get('/api/v1/items/')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        number_of_items = len(response.data)
+        self.assertEqual(number_of_items, 2)
+
+    def test_cannot_add_item_when_not_authenticated(self):
+        pass
+        # self.client.force_authenticate(user=self.user)
+        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # post_data = {
+        #     'title': 'Clean Garage',
+        #     'description': '',
+        # }
+
+        # response = self.client.post('/api/v1/items/', data=post_data)
+
+        # print(response.data)
+
+#        Item.objects.filter(title='Clean Garage',)
+
+    # def test_cannot_add_item_when_not_authorized(self):
+    #     pass
+
+    # def test_can_item(self):
+    #     pass
+
+    # def test_cannot_delete_item_when_not_authenticated(self):
+    #     pass
+
+    # def test_cannot_delete_item_when_not_authorized(self):
+    #     pass
+
+    # def test_can_delete_item(self):
+    #     pass
+
+    # def test_cannot_update_item_when_not_authenticated(self):
+    #     pass
+
+    # def test_cannot_update_item_when_not_authorized(self):
+    #     pass
+
+    # def test_can_update_item(self):
+    #     pass
+
+    def test_cannot_read_item_when_not_authenticated(self):
+        pass
+
+    def test_cannot_read_item_when_not_authorized(self):
+        pass
+
+    def test_can_read_item(self):
+        pass
+        # self.client.force_authenticate(user=self.user)
+        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+       
+        # items = Item.objects.all()
+        # print(items)
+
+        # data = {
+        #     'id': 1
+        # }
+
+        # response = self.client.get('/api/v1/checklist/', data=data)
