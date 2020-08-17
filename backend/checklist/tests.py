@@ -5,6 +5,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import RequestsClient
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
+from django.db.models import DateField
+from django.conf import settings
 from items.models import Item
 import datetime
 
@@ -78,31 +80,35 @@ class ItemListTest(APITestCase):
         response = self.client.get('/api/v1/items/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        number_of_items = len(response.data)
-        self.assertEqual(number_of_items, 2)
+        self.assertEqual(len(response.data), 2)
 
     def test_cannot_add_item_when_not_authenticated(self):
-        pass
-        # self.client.force_authenticate(user=self.user)
-        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        post_data = {
+            'title': 'Clean Garage',
+            'description': 'Please clean the garage',
+        }
 
-        # post_data = {
-        #     'title': 'Clean Garage',
-        #     'description': '',
-        # }
+        response = self.client.post('/api/v1/items/', data=post_data)
 
-        # response = self.client.post('/api/v1/items/', data=post_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        # print(response.data)
+    def test_can_item(self):
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
-#        Item.objects.filter(title='Clean Garage',)
+        due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
 
-    # def test_cannot_add_item_when_not_authorized(self):
-    #     pass
+        post_data = {
+            'title': 'Clean Garage',
+            'description': 'Please clean the garage',
+            'due_date': due_date.strftime('%d-%m-%Y')
+        }
 
-    # def test_can_item(self):
-    #     pass
+        response = self.client.post('/api/v1/items/', data=post_data)
+
+        print(response.data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # def test_cannot_delete_item_when_not_authenticated(self):
     #     pass
