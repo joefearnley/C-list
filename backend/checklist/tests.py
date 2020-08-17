@@ -106,9 +106,7 @@ class ItemListTest(APITestCase):
 
         response = self.client.post('/api/v1/items/', data=post_data)
 
-        print(response.data)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     # def test_cannot_delete_item_when_not_authenticated(self):
     #     pass

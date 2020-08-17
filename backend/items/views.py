@@ -20,35 +20,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
-    # def list(self, request):
-    #     queryset = self.get_queryset().filter(user=request.user)
-    #     serializer = ItemSerializer(queryset, many=True)
-    #     return Response(serializer.data)
-
-    # def perform_create(self, serializer):
-    #     # print('asfasdfsfd')
-    #     print(self.request.user)
-    #     serializer.save(user=self.request.user)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-
     def create(self, request):  
-        # serializer = self.serializer_class(data=request.data)
-        # request.data['user'] = request.user.id
-        
-        # serializer.is_valid(raise_exception=True)
-
-        # serializer.save()
-        
-        # if serializer.is_valid():
-        #     serializer.save()
-        # return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        # return Response({})
-
-        # item = Item(user=request.user)
-
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=ValueError):
             serializer.save(user=self.request.user)
