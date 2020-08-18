@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from items.models import Item
+from .models import Item
 from rest_framework import serializers, fields
 
 class ItemSerializer(serializers.ModelSerializer):

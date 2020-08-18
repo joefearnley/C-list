@@ -2,11 +2,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
-from rest_framework.test import RequestsClient
-from rest_framework.test import APIClient
 from django.contrib.auth.models import User
-from django.db.models import DateField
-from django.conf import settings
 from items.models import Item
 import datetime
 
