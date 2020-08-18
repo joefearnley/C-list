@@ -20,10 +20,10 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
-    def create(self, request):  
+    def create(self, request):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=ValueError):
-            serializer.save(user=self.request.user)
+        if (serializer.is_valid()):
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
@@ -42,25 +42,3 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     # def destroy(self, request, pk=None):
     #     pass
-
-class UserCheckList(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-
-    def list(self, request):
-        queryset = self.get_queryset().filter(user=request.user).order_by('-created')
-        serializer = ItemSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def get(self, request):
-        return Response({'getting': True})
-
-    def post(self, request):
-        return Response({'posting': True})
-
-    def patch(self, request):
-        return Response({'patching': True})
-
-    def delete(self, request):
-        return Response({'deleting': True})

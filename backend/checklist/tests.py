@@ -16,6 +16,7 @@ class AuthenticateTest(APITestCase):
         self.password = 'secret'
         self.email = 'joetest123@gmail.com'
 
+
         self.user = User.objects.create(
             username=self.username, 
             email=self.email,
@@ -64,9 +65,10 @@ class ItemListTest(APITestCase):
         self.token = Token.objects.create(user=self.user)
         self.token.save()
 
-        due_date = datetime.datetime.now() + datetime.timedelta(weeks=3)
-        Item.objects.create(title='Clean Pool', description='Clean the Pool', user=self.user, due_date=due_date)
-        Item.objects.create(title='Clean Bathroom', description='Clean the Bathroom', user=self.user, due_date=due_date)
+        self.due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
+    
+        Item.objects.create(title='Clean Pool', description='Clean the Pool', user=self.user, due_date=self.due_date)
+        Item.objects.create(title='Clean Bathroom', description='Clean the Bathroom', user=self.user, due_date=self.due_date)
 
     def test_cannot_view_checklist_if_not_logged_in(self):
         response = self.client.get('/api/v1/items/')
@@ -92,21 +94,23 @@ class ItemListTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_can_item(self):
+    def test_can_add_item(self):
         self.client.force_authenticate(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
-        due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
-
         post_data = {
             'title': 'Clean Garage',
             'description': 'Please clean the garage',
-            'due_date': due_date.strftime('%d-%m-%Y')
+            'due_date': self.due_date.strftime('%d-%m-%Y')
         }
 
         response = self.client.post('/api/v1/items/', data=post_data)
 
+        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_cannot_add_item_when_not_authenticated(self):
+        pass
 
     # def test_cannot_delete_item_when_not_authenticated(self):
     #     pass
