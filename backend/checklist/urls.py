@@ -15,7 +15,6 @@ router.register(r'items', views.ItemViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
-    path('api/v1/checklist/', views.UserCheckList.as_view(), name='CheckList'),
     path('api/v1/token-auth/', obtain_auth_token, name='token_auth'),
 ]
 

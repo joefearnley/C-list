@@ -16,7 +16,6 @@ class AuthenticateTest(APITestCase):
         self.password = 'secret'
         self.email = 'joetest123@gmail.com'
 
-
         self.user = User.objects.create(
             username=self.username, 
             email=self.email,
@@ -26,7 +25,7 @@ class AuthenticateTest(APITestCase):
         self.user.set_password(self.password)
         self.user.save()
 
-    def test_invalid_credentils_does_not_return_token(self):
+    def test_invalid_credentials_does_not_return_token(self):
         post_data = {
             'username': self.username,
             'password': 'test1234'
@@ -100,26 +99,59 @@ class ItemListTest(APITestCase):
         post_data = {
             'title': 'Clean Garage',
             'description': 'Please clean the garage',
-            'due_date': self.due_date.strftime('%d-%m-%Y')
+            'due_date': self.due_date.strftime('%Y-%m-%d')
         }
 
         response = self.client.post('/api/v1/items/', data=post_data)
 
-        print(response.data)
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_cannot_add_item_when_not_authenticated(self):
+    def test_cannot_read_item_when_not_authenticated(self):
+        item = Item.objects.get(title="Clean Pool")
+
+        response = self.client.get('/api/v1/items/%s/' % str(item.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_cannot_read_item_when_not_authorized(self):
+        temp_user = User.objects.create(
+            username='john',
+            email='jdoe123@gmail.com',
+            is_active=True
+        )
+
+        temp_user_token = Token.objects.create(user=temp_user)
+        temp_user_token.save()
+
+        item = Item.objects.get(title="Clean Pool")
+
+        self.client.force_authenticate(user=temp_user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + temp_user_token.key)
+
+        response = self.client.get('/api/v1/items/%s/' % str(item.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        response = self.client.get('/api/v1/items/%s/' % str(item.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_can_read_item(self):
         pass
+        # self.client.force_authenticate(user=self.user)
+        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
-    # def test_cannot_delete_item_when_not_authenticated(self):
-    #     pass
+        # items = Item.objects.all()
+        # print(items)
 
-    # def test_cannot_delete_item_when_not_authorized(self):
-    #     pass
+        # data = {
+        #     'id': 1
+        # }
 
-    # def test_can_delete_item(self):
-    #     pass
+        # response = self.client.get('/api/v1/checklist/', data=data)
 
     # def test_cannot_update_item_when_not_authenticated(self):
     #     pass
@@ -130,22 +162,11 @@ class ItemListTest(APITestCase):
     # def test_can_update_item(self):
     #     pass
 
-    def test_cannot_read_item_when_not_authenticated(self):
-        pass
+    # def test_cannot_delete_item_when_not_authenticated(self):
+    #     pass
 
-    def test_cannot_read_item_when_not_authorized(self):
-        pass
+    # def test_cannot_delete_item_when_not_authorized(self):
+    #     pass
 
-    def test_can_read_item(self):
-        pass
-        # self.client.force_authenticate(user=self.user)
-        # self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-       
-        # items = Item.objects.all()
-        # print(items)
-
-        # data = {
-        #     'id': 1
-        # }
-
-        # response = self.client.get('/api/v1/checklist/', data=data)
+    # def test_can_delete_item(self):
+    #     pass
