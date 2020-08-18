@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from .models import Item
 from rest_framework import viewsets, status, permissions
-from items.serializers import UserSerializer, GroupSerializer, ItemSerializer
+from .serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
