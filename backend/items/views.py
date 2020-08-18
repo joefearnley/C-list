@@ -1,11 +1,9 @@
 from django.contrib.auth.models import User, Group
 from items.models import Item
-from rest_framework import generics, viewsets, status, permissions
+from rest_framework import viewsets, status, permissions
 from items.serializers import UserSerializer, GroupSerializer, ItemSerializer
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
 
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -32,6 +30,3 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-    # def destroy(self, request, pk=None):
-    #     return Response({'message': 'Item Deleted'})
