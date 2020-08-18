@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from items.models import Item
+from .models import Item
 from rest_framework import viewsets, status, permissions
 from items.serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.response import Response
