@@ -30,21 +30,8 @@ class ItemViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        # return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
-
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    # def retrieve(self, request, pk=None):
-    #     return Response({
-    #         'id': pk
-    #     })
-
-    # def update(self, request, pk=None):
-    #     pass
-
-    # def partial_update(self, request, pk=None):
-    #     pass
-
     # def destroy(self, request, pk=None):
-    #     pass
+    #     return Response({'message': 'Item Deleted'})

@@ -31,7 +31,7 @@ class AuthenticateTest(APITestCase):
             'password': 'test1234'
         }
 
-        response = self.client.post('/api/v1/token-auth/', data=post_data, format='json')
+        response = self.client.post('/api/v1/token-auth/', data=post_data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['non_field_errors'][0], 'Unable to log in with provided credentials.')
@@ -42,7 +42,7 @@ class AuthenticateTest(APITestCase):
             'password': self.password
         }
 
-        response = self.client.post('/api/v1/token-auth/', data=post_data, format='json')
+        response = self.client.post('/api/v1/token-auth/', data=post_data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(response.data.get('token'), None)
@@ -150,20 +150,103 @@ class ItemListTest(APITestCase):
         self.assertEqual(response.data.get('title'), 'Clean Garage')
         self.assertEqual(response.data.get('description'), 'Clean the Garage')
 
-    # def test_cannot_update_item_when_not_authenticated(self):
-    #     pass
+    def test_cannot_update_item_when_not_authenticated(self):
+        item = Item.objects.get(title='Clean Pool')
+        patch_data = {
+            'title': 'Clean Pool Now!',
+            'description': 'Please clean the pool and clean it now!',
+        }
 
-    # def test_cannot_update_item_when_not_authorized(self):
-    #     pass
+        response = self.client.patch('/api/v1/items/%s/' % str(item.pk), data=patch_data)
 
-    # def test_can_update_item(self):
-    #     pass
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    # def test_cannot_delete_item_when_not_authenticated(self):
-    #     pass
+    def test_cannot_update_item_when_not_authorized(self):
+        temp_user = User.objects.create(
+            username='john',
+            email='jdoe123@gmail.com',
+            is_active=True
+        )
 
-    # def test_cannot_delete_item_when_not_authorized(self):
-    #     pass
+        temp_user_token = Token.objects.create(user=temp_user)
+        temp_user_token.save()
 
-    # def test_can_delete_item(self):
-    #     pass
+        item = Item.objects.get(title='Clean Pool')
+        patch_data = {
+            'title': 'Clean Pool Now!',
+            'description': 'Please clean the pool and clean it now!',
+        }
+
+        self.client.force_authenticate(user=temp_user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + temp_user_token.key)
+
+        response = self.client.patch('/api/v1/items/%s/' % str(item.pk), data=patch_data)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_can_update_item(self):
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        item = Item.objects.get(title='Clean Pool')
+        patch_data = {
+            'title': 'Clean Pool Now!',
+            'description': 'Please clean the pool and clean it now!',
+        }
+
+        response = self.client.patch('/api/v1/items/%s/' % str(item.pk), data=patch_data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get('title'), 'Clean Pool Now!')
+        self.assertEqual(response.data.get('description'), 'Please clean the pool and clean it now!')
+
+    def test_cannot_delete_item_when_not_authenticated(self):
+        item = Item.objects.create(title='Clean Car',
+                            description='Clean the Car',
+                            user=self.user,
+                            due_date=self.due_date)
+
+        response = self.client.delete('/api/v1/items/%s/' % str(item.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_cannot_delete_item_when_not_authorized(self):
+        temp_user = User.objects.create(
+            username='john',
+            email='jdoe123@gmail.com',
+            is_active=True
+        )
+
+        temp_user_token = Token.objects.create(user=temp_user)
+        temp_user_token.save()
+
+        item = Item.objects.create(title='Clean Car',
+                            description='Clean the Car',
+                            user=self.user,
+                            due_date=self.due_date)
+
+        self.client.force_authenticate(user=temp_user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + temp_user_token.key)
+
+        response = self.client.delete('/api/v1/items/%s/' % str(item.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_can_delete_item(self):
+        item = Item.objects.create(title='Clean Car',
+                            description='Clean the Car',
+                            user=self.user,
+                            due_date=self.due_date)
+
+        items = Item.objects.all()
+        self.assertEqual(len(items), 3)
+
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        response = self.client.delete('/api/v1/items/%s/' % str(item.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        items = Item.objects.all()
+        self.assertEqual(len(items), 2)
