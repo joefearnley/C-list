@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from .models import Item
-from rest_framework import serializers, fields
+from rest_framework import serializers
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
