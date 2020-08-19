@@ -47,12 +47,12 @@ class LoginModal extends Component {
         e.preventDefault();
         this.setState({ showError: false });
 
-        axios.post(`${Config.API_AUTH_URL}/login/`, {
+        axios.post(`${Config.API_URL}/token-auth/`, {
             username: this.state.username,
             password: this.state.password
         })
         .then(res => {
-            localStorage.setItem('token', res.data.key);
+            localStorage.setItem('token', res.data.token);
             this.props.history.push('/list');
         })
         .catch(err => {

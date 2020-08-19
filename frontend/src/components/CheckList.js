@@ -22,7 +22,7 @@ export default class CheckList extends Component {
     }
 
     loadItems() {
-        api.get(`${Config.API_URL}/checklist/`)
+        api.get(`${Config.API_URL}/items/`)
             .then(res => {
                 console.log(res);
 
