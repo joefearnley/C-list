@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from .models import Item
 import datetime
 
-
 class ItemListTest(APITestCase):
     def setUp(self):
         self.username = 'joe'

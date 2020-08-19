@@ -2,6 +2,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 class AuthenticateTest(APITestCase):
     def setUp(self):
@@ -39,3 +40,13 @@ class AuthenticateTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(response.data.get('token'), None)
+
+    def test_logout_removes_auth_token(self):
+        token = Token.objects.create(user=self.user)
+        token.save()
+
+        response = self.client.post('/api/v1/logout/')
+
+        # print(response)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

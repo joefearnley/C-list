@@ -4,6 +4,7 @@ from rest_framework import viewsets, status, permissions
 from .serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -30,3 +31,10 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class LogoutView(APIView):
+    def post(self, request):
+        print('laksqdfklajsdfkljaskldfjsd')
+        print(request.user.auth_token)
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)
