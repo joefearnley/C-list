@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import axios from 'axios';
+import apiClient from '../api';
 import Config from "../config";
 import { withRouter } from 'react-router';
 
@@ -47,7 +47,7 @@ class LoginModal extends Component {
         e.preventDefault();
         this.setState({ showError: false });
 
-        axios.post(`${Config.API_URL}/token-auth/`, {
+        apiClient.post(`${Config.API_URL}/token-auth/`, {
             username: this.state.username,
             password: this.state.password
         })

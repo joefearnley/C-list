@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
 import { Check2Square, Check2, Trash, ArrowRepeat, Plus } from 'react-bootstrap-icons';
-import api from '../api';
-import Config from "../config";
+import apiClient from '../api';
+import config from "../config";
+import AddItemModal from './AddItemModal'
 
 export default class CheckList extends Component {
     constructor(props, context) {
@@ -11,9 +12,11 @@ export default class CheckList extends Component {
         this.completeItem = this.completeItem.bind(this);
         this.unCompleteItem = this.unCompleteItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
+        this.handleAddItemModal = this.handleAddItemModal.bind(this);
 
         this.state = {
-            items: []
+            items: [],
+            showAddItemModal: false
         };
     }
 
@@ -22,10 +25,8 @@ export default class CheckList extends Component {
     }
 
     loadItems() {
-        api.get(`${Config.API_URL}/items/`)
+        apiClient.get(`${config.API_URL}/items/`)
             .then(res => {
-                console.log(res);
-
                 this.setState({ items: res.data });
             })
             .catch(e => console.log(e));
@@ -46,21 +47,18 @@ export default class CheckList extends Component {
         console.log(item);
     }
 
-    logout() {
-        api.post(`${Config.API_AUTH_URL}/logout/`)
-            .then(res => {
-                localStorage.setItem('token', null);
-                this.props.history.push('/');
-            })
-            .catch(e => console.log(e));    
-    }
-
     renderActions(item) {
         if (item.complete) {
             return ( <Button variant="default" onClick={() => this.unCompleteItem(item)}><ArrowRepeat /></Button> );
         }
 
         return ( <Button variant="default" onClick={() => this.completeItem(item)}><Check2 /></Button> );
+    }
+
+    handleAddItemModal() {
+        let showModal = !this.state.showAddItemModal;
+        this.setState({ showAddItemModal: showModal });
+        this.loadItems();
     }
 
     renderItems() {
@@ -82,14 +80,11 @@ export default class CheckList extends Component {
             <div className="checklist">
                 <Container>
                     <Row className="justify-content-md-center">
-                        <Col md="10">
+                        <Col sm="8">
                             <h2>Your CheckList <Check2Square /></h2>
                         </Col>
-                        <Col md="1">
-                            <p><Button variant="light" onClick={() => this.showAddItem()}><Plus /></Button></p>
-                        </Col>
-                        <Col md="1">
-                            <p><Button variant="link" onClick={() => this.logout()}>Logout</Button></p>
+                        <Col sm="1">
+                            <p><Button variant="light" onClick={() => this.handleAddItemModal()}><Plus /></Button></p>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
@@ -100,6 +95,8 @@ export default class CheckList extends Component {
                         </Col>
                     </Row>
                 </Container>
+
+                <AddItemModal show={this.state.showAddItemModal} handleAddItemModal={this.handleAddItemModal} />
             </div>
         );
     }

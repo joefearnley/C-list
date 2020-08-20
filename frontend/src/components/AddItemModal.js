@@ -2,30 +2,20 @@ import React, { Component } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import api from 'axios';
+import apiClient from '../api';
+import config from '../config';
 
 class AddItemModal extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.handleShow = this.handleShow.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-
         this.state = {
-            show: false,
+            show: this.props.show,
             title: '',
             description: '',
+            dueDate: '',
             showError: ''
         };
-    }
-
-    handleClose = () => {
-        this.setState({ show: false });
-    }
-
-    handleShow = e => {
-        e.preventDefault();
-        this.setState({ show: true });
     }
 
     updateTitle = e => {
@@ -36,21 +26,25 @@ class AddItemModal extends Component {
         this.setState({ description: e.target.value });
     }
 
+    updateDueDate = e => {
+        this.setState({ dueDate: e.target.value });
+    }
+
     submitForm = e => {
         e.preventDefault();
         this.setState({ showError: false });
 
-        axios.post(`${api.baseURL}/checklist/additem`, {
-            username: this.state.username,
-            password: this.state.password
+        apiClient.post(`${config.API_URL}/items/`, {
+            title: this.state.title,
+            description: this.state.description,
+            due_date: this.state.dueDate
         })
         .then(res => {
-            localStorage.setItem('token', res.data.key);
-            this.props.history.push('/list');
+            this.props.handleAddItemModal();
         })
         .catch(err => {
             if (err.response) {
-                this.setState(() => ({ showError: true }));
+                    this.setState(() => ({ showError: true }));
             }
         });
     }
@@ -58,7 +52,7 @@ class AddItemModal extends Component {
     render() {
         return (
             <div>
-                <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal show={this.props.show} onHide={this.props.handleAddItemModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add Item</Modal.Title>
                     </Modal.Header>
@@ -70,16 +64,21 @@ class AddItemModal extends Component {
                                 <Form.Control.Feedback type="invalid">Please enter a title</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group controlId="formDescription">
-                                <Form.Label>Desciption</Form.Label>
-                                <Form.Control type="password" onChange={this.updatePDescription} />
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control type="text" onChange={this.updateDescription} />
                                 <Form.Control.Feedback type="invalid">Please enter a description</Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group controlId="formDueDate">
+                                <Form.Label>Due Date</Form.Label>
+                                <Form.Control type="date" onChange={this.updateDueDate} />
+                                <Form.Control.Feedback type="invalid">Please enter a due date</Form.Control.Feedback>
                             </Form.Group>
                         </Form>
                         <p className={this.state.showError ? 'show-error' : 'hide-error'}>Please enter a Title and Description.</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={this.submitForm}>Sign in</Button>
-                        <Button variant="secondary" onClick={this.handleClose}>Cancel</Button>
+                        <Button variant="primary" onClick={this.submitForm}>Add</Button>
+                        <Button variant="secondary" onClick={this.props.handleAddItemModal}>Cancel</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
@@ -87,4 +86,4 @@ class AddItemModal extends Component {
     }
 }
 
-export default withRouter(LoginModal);
+export default AddItemModal;
