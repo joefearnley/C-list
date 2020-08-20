@@ -161,6 +161,39 @@ class ItemListTest(APITestCase):
         self.assertEqual(response.data.get('title'), 'Clean Pool Now!')
         self.assertEqual(response.data.get('description'), 'Please clean the pool and clean it now!')
 
+    def test_can_complete_item(self):
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        item = Item.objects.get(title='Clean Pool')
+        patch_data = {
+            'complete': True
+        }
+
+        response = self.client.patch('/api/v1/items/%s/' % str(item.pk), data=patch_data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get('complete'), True)
+
+    def test_can_uncomplete_item(self):
+        item = Item.objects.create(title='Wash Feet',
+                                   description='Wash yo Feet',
+                                   user=self.user,
+                                   complete=True,
+                                   due_date=self.due_date)
+
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        patch_data = {
+            'complete': False
+        }
+
+        response = self.client.patch('/api/v1/items/%s/' % str(item.pk), data=patch_data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get('complete'), False)
+
     def test_cannot_delete_item_when_not_authenticated(self):
         item = Item.objects.create(title='Clean Car',
                                    description='Clean the Car',
