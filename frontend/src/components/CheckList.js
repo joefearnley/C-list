@@ -33,18 +33,34 @@ export default class CheckList extends Component {
     }
 
     completeItem(item) {
-        console.log('completing item.');
-        console.log(item);
+        apiClient.patch(`${config.API_URL}/items/${item.id}/`, {
+            complete: true
+        })
+        .then(res => {
+            console.log(res);
+            console.log('item completed.')
+        })
+        .catch(e => console.log(e));
     }
 
     unCompleteItem(item) {
-        console.log('UN completing item.');
-        console.log(item);
+        apiClient.patch(`${config.API_URL}/items/${item.id}/`, {
+            complete: false
+        })
+        .then(res => {
+            console.log(res);
+            console.log('item UNcompleted.')
+        })
+        .catch(e => console.log(e));
     }
 
     deleteItem(item) {
-        console.log('deleting item');
-        console.log(item);
+        apiClient.delet(`${config.API_URL}/items/${item.id}/`)
+        .then(res => {
+            console.log(res);
+            console.log('item deleted.')
+        })
+        .catch(e => console.log(e));
     }
 
     renderActions(item) {
