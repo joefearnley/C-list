@@ -33,32 +33,42 @@ export default class CheckList extends Component {
     }
 
     completeItem(item) {
-        apiClient.patch(`${config.API_URL}/items/${item.id}/`, {
+        apiClient.patch(`${config.API_URL}/items/${item.pk}/`, {
             complete: true
         })
         .then(res => {
-            console.log(res);
-            console.log('item completed.')
+            this.setState(state => {
+                return state.items.map(i => {
+                    i.complete = (i.pk === item.pk) ? true : i.complete;
+                    return i;
+                });
+              });
         })
         .catch(e => console.log(e));
     }
 
     unCompleteItem(item) {
-        apiClient.patch(`${config.API_URL}/items/${item.id}/`, {
+        apiClient.patch(`${config.API_URL}/items/${item.pk}/`, {
             complete: false
         })
         .then(res => {
-            console.log(res);
-            console.log('item UNcompleted.')
+            this.setState(state => {
+                return state.items.map(i => {
+                    i.complete = (i.pk === item.pk) ? false : i.complete;
+                    return i;
+                });
+              });
         })
         .catch(e => console.log(e));
     }
 
-    deleteItem(item) {
-        apiClient.delet(`${config.API_URL}/items/${item.id}/`)
+    deleteItem(item) {        
+        apiClient.delete(`${config.API_URL}/items/${item.pk}/`)
         .then(res => {
-            console.log(res);
-            console.log('item deleted.')
+            this.setState(state => {
+                const items = state.items.filter(i => i.pk !== item.pk);
+                return { items };
+            });
         })
         .catch(e => console.log(e));
     }
