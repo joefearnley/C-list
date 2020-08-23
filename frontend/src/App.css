@@ -58,3 +58,7 @@
 .btn-link {
     color: #61dafb
 }
+
+.strikethrough {
+    text-decoration: line-through;
+}

@@ -91,7 +91,7 @@ export default class CheckList extends Component {
         return this.state.items.map((item, i) => {
             return (
                     <ListGroup.Item key={i}>
-                        { item.title }
+                        <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
                         <span className="float-right">
                             { this.renderActions(item) }
                             <Button variant="default" onClick={() => this.deleteItem(item)}><Trash /></Button>
