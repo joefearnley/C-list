@@ -23,6 +23,11 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('-created')
     serializer_class = ItemSerializer
 
+    def list(self, request):
+        qs = self.get_queryset().filter(user=request.user)
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -31,10 +36,3 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-class LogoutView(APIView):
-    def post(self, request):
-        print('laksqdfklajsdfkljaskldfjsd')
-        print(request.user.auth_token)
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)

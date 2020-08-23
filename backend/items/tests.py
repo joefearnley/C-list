@@ -29,12 +29,32 @@ class ItemListTest(APITestCase):
         Item.objects.create(title='Clean Bathroom', description='Clean the Bathroom', user=self.user,
                             due_date=self.due_date)
 
-    def test_cannot_view_checklist_if_not_logged_in(self):
+    def test_cannot_view_checklist_if_not_authorized(self):
         response = self.client.get('/api/v1/items/')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_can_view_checklist_if_logged_in(self):
+    def test_can_view_checklist_if_authorized(self):
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        response = self.client.get('/api/v1/items/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_can_only_view_items_user_owns(self):
+        temp_user = User.objects.create(
+            username='john',
+            email='jdoe123@gmail.com',
+            is_active=True
+        )
+
+        item = Item.objects.create(title='Clean Garage',
+                            description='Clean the Garage',
+                            user=temp_user,
+                            due_date=self.due_date)
+
         self.client.force_authenticate(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
@@ -172,7 +192,9 @@ class ItemListTest(APITestCase):
         response = self.client.patch('/api/v1/items/%s/' % str(item.pk), data=patch_data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get('complete'), True)
+
+        updated_item = Item.objects.get(title='Clean Pool')
+        self.assertEqual(updated_item.complete, True)
 
     def test_can_uncomplete_item(self):
         item = Item.objects.create(title='Wash Feet',
@@ -191,7 +213,9 @@ class ItemListTest(APITestCase):
         response = self.client.patch('/api/v1/items/%s/' % str(item.pk), data=patch_data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get('complete'), False)
+
+        updated_item = Item.objects.get(title='Wash Feet')
+        self.assertEqual(updated_item.complete, False)
 
     def test_cannot_delete_item_when_not_authenticated(self):
         item = Item.objects.create(title='Clean Car',
