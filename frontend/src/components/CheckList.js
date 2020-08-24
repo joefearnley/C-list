@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
-import { Check2Square, Check2, Trash, ArrowRepeat, Plus } from 'react-bootstrap-icons';
+import { Check2Square, Check2, Trash, ArrowRepeat, Plus, PencilSquare } from 'react-bootstrap-icons';
+import Form from 'react-bootstrap/Form';
 import apiClient from '../api';
 import config from "../config";
 import AddItemModal from './AddItemModal'
@@ -73,6 +74,10 @@ export default class CheckList extends Component {
         .catch(e => console.log(e));
     }
 
+    editItem(item) {
+        console.log('editing item....');
+    }
+
     renderActions(item) {
         if (item.complete) {
             return ( <Button variant="default" onClick={() => this.unCompleteItem(item)}><ArrowRepeat /></Button> );
@@ -92,7 +97,9 @@ export default class CheckList extends Component {
             return (
                     <ListGroup.Item key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
+                        <Form.Control type="text" className="change-title" onChange={this.updateTitle} value="{ item.title }" />
                         <span className="float-right">
+                            <Button variant="default" onClick={() => this.editItem(item)}><PencilSquare /></Button>
                             { this.renderActions(item) }
                             <Button variant="default" onClick={() => this.deleteItem(item)}><Trash /></Button>
                         </span>

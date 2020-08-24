@@ -62,3 +62,7 @@
 .strikethrough {
     text-decoration: line-through;
 }
+
+input.change-title {
+    display: none;
+}
