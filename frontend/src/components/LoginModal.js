@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import apiClient from '../api';
-import Config from "../config";
+import config from "../config";
 import { withRouter } from 'react-router';
 
 class LoginModal extends Component {
@@ -47,7 +47,7 @@ class LoginModal extends Component {
         e.preventDefault();
         this.setState({ showError: false });
 
-        apiClient.post(`${Config.API_URL}/token-auth/`, {
+        apiClient.post(`${config.API_URL}/token-auth/`, {
             username: this.state.username,
             password: this.state.password
         })
