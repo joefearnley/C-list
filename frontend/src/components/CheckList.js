@@ -74,7 +74,7 @@ export default class CheckList extends Component {
         .catch(e => console.log(e));
     }
 
-    editItem(item) {
+    updateTitle(item) {
         console.log('editing item....');
     }
 
@@ -97,7 +97,7 @@ export default class CheckList extends Component {
             return (
                     <ListGroup.Item key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
-                        <Form.Control type="text" className="change-title" onChange={this.updateTitle} value="{ item.title }" />
+                        <Form.Control type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } />
                         <span className="float-right">
                             <Button variant="default" onClick={() => this.editItem(item)}><PencilSquare /></Button>
                             { this.renderActions(item) }
