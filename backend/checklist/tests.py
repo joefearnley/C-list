@@ -40,3 +40,7 @@ class AuthenticateTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(response.data.get('token'), None)
+
+    def test_can_register_user():
+        # given a username, email,
+        pass
