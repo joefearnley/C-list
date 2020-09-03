@@ -41,3 +41,12 @@ Install Dependencies
 Run app
 
 `(checklist-env) $/frontend> npm start`
+
+TODO:
+- Account registration
+- Account section
+ - change email
+ - change password
+ - delete account
+
+- Email notifications for Account section updates
