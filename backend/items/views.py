@@ -1,22 +1,14 @@
-from django.contrib.auth.models import User, Group
-from .models import Item
-from rest_framework import viewsets, status, permissions
-from .serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework import viewsets, status, permissions
+from .models import Item
+from .serializers import ItemSerializer
+
 
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwner]

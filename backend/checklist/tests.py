@@ -28,7 +28,10 @@ class AuthenticateTest(APITestCase):
         response = self.client.post('/api/v1/token-auth/', data=post_data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['non_field_errors'][0], 'Unable to log in with provided credentials.')
+        self.assertEqual(
+            response.data['non_field_errors'][0], 
+            'Unable to log in with provided credentials.'
+        )
 
     def test_token_auth_returns_token(self):
         post_data = {
@@ -40,7 +43,3 @@ class AuthenticateTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(response.data.get('token'), None)
-
-    def test_can_register_user():
-        # given a username, email,
-        pass
