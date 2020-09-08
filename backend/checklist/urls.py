@@ -18,5 +18,4 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('api/v1/token-auth/', obtain_auth_token, name='token_auth'),
-    path('api/v1/register/', obtain_auth_token, name='token_auth'),
 ]

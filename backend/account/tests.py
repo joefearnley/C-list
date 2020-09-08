@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework import status
 
+
 class AccountTest(TestCase):
 
     def test_can_create_account(self):
@@ -13,4 +14,6 @@ class AccountTest(TestCase):
 
         response = self.client.post('/api/v1/account/', data=post_data)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['username'], post_data['username'])
+        self.assertEqual(response.data['email'], post_data['email'])

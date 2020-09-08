@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
+
 
 class AuthenticateTest(APITestCase):
     def setUp(self):
@@ -11,7 +10,7 @@ class AuthenticateTest(APITestCase):
         self.email = 'joetest123@gmail.com'
 
         self.user = User.objects.create(
-            username=self.username, 
+            username=self.username,
             email=self.email,
             is_active=True
         )

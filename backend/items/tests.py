@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Item
 import datetime
+
 
 class ItemListTest(APITestCase):
     def setUp(self):
