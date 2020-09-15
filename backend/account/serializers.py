@@ -19,7 +19,9 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AccountSerializer(serializers.HyperlinkedModelSerializer):
+    email = serializers.EmailField(required=True,)
+    password = serializers.CharField(required=True, write_only=True,)
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'password']
