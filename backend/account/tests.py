@@ -72,8 +72,8 @@ class AccountTest(TestCase):
         post_data = {
             'username': 'jo3F123',
             'email': 'jo3F123@gmail.com',
-            'password': '',
-            'confirm_password': ''
+            'password': '12345',
+            'confirm_password': '123456'
         }
 
         response = self.client.post('/api/v1/account/', data=post_data)

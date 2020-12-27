@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
-import Config from "../config";
+import config from "../config";
 import { withRouter } from 'react-router';
 
 class SignupModal extends Component {
@@ -51,7 +51,7 @@ class SignupModal extends Component {
         e.preventDefault();
         this.setState({ showError: false });
 
-        axios.post(`${Config.API_AUTH_URL}/registration/`, {
+        axios.post(`${config.API_URL}/account/`, {
             username: this.state.username,
             email: this.state.email,
             password1: this.state.password,
@@ -59,12 +59,12 @@ class SignupModal extends Component {
         })
         .then(res => {
              this.props.history.push('/list');
-          })
-          .catch(err => {
+        })
+        .catch(err => {
             if (err.response) {
                 this.setState(() => ({ showError: true }));
             }
-          });
+        });
     }
 
     render() {
