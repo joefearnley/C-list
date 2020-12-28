@@ -9,7 +9,6 @@ class AccountTest(TestCase):
             'username': '',
             'email': 'jo3F123@gmail.com',
             'password': 'secret123',
-            'confirm_password': 'secret123'
         }
 
         response = self.client.post('/api/v1/account/', data=post_data)
@@ -25,7 +24,6 @@ class AccountTest(TestCase):
             'username': 'jo3F123',
             'email': '',
             'password': 'secret123',
-            'confirm_password': 'secret123'
         }
 
         response = self.client.post('/api/v1/account/', data=post_data)
@@ -41,7 +39,6 @@ class AccountTest(TestCase):
             'username': 'jo3F123',
             'email': 'joeffoefijo',
             'password': 'secret123',
-            'confirm_password': 'secret123'
         }
 
         response = self.client.post('/api/v1/account/', data=post_data)
@@ -57,23 +54,6 @@ class AccountTest(TestCase):
             'username': 'jo3F123',
             'email': 'jo3F123@gmail.com',
             'password': '',
-            'confirm_password': ''
-        }
-
-        response = self.client.post('/api/v1/account/', data=post_data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data.get('password')[0],
-            'This field may not be blank.'
-        )
-
-    def test_cannot_create_account_when_passwords_do_not_match(self):
-        post_data = {
-            'username': 'jo3F123',
-            'email': 'jo3F123@gmail.com',
-            'password': '12345',
-            'confirm_password': '123456'
         }
 
         response = self.client.post('/api/v1/account/', data=post_data)
@@ -89,10 +69,11 @@ class AccountTest(TestCase):
             'username': 'jo3F123',
             'email': 'jo3F123@gmail.com',
             'password': 'secret123',
-            'confirm_password': 'secret123'
         }
 
         response = self.client.post('/api/v1/account/', data=post_data)
+
+        print(response.data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['username'], post_data['username'])

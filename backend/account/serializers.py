@@ -21,8 +21,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class AccountSerializer(serializers.HyperlinkedModelSerializer):
     email = serializers.EmailField(required=True,)
     password = serializers.CharField(required=True, write_only=True,)
-    confirm_password = serializers.CharField(required=True,)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password']
+        fields = ['username', 'email', 'password']

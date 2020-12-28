@@ -17,7 +17,6 @@ class SignupModal extends Component {
             username: '',
             email: '',
             password: '',
-            passwordConfirmation: '',
             show: false
         };
     }
@@ -43,10 +42,6 @@ class SignupModal extends Component {
         this.setState({ password: e.target.value });
     }
 
-    updatePasswordConfirmation = e => {
-        this.setState({ passwordConfirmation: e.target.value });
-    }
-
     submitForm = e => {
         e.preventDefault();
         this.setState({ showError: false });
@@ -54,8 +49,7 @@ class SignupModal extends Component {
         axios.post(`${config.API_URL}/account/`, {
             username: this.state.username,
             email: this.state.email,
-            password1: this.state.password,
-            password2: this.state.passwordConfirmation
+            password: this.state.password
         })
         .then(res => {
              this.props.history.push('/list');
@@ -90,11 +84,6 @@ class SignupModal extends Component {
                             <Form.Group controlId="formPassword">
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control type="password" onChange={this.updatePassword} />
-                            </Form.Group>
-                            <Form.Group controlId="formConfirmPassword">
-                                <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control type="password"  onChange={this.updatePasswordConfirmation}/>
-                                <Form.Text className="d-none text-danger">Passwords do not match.</Form.Text>
                             </Form.Group>
                         </Form>
                     </Modal.Body>

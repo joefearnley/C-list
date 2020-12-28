@@ -10,6 +10,7 @@ class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user
 
+
 class ItemViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwner]
     queryset = Item.objects.all().order_by('-created')
