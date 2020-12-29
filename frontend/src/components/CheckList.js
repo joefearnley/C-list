@@ -75,7 +75,11 @@ export default class CheckList extends Component {
     }
 
     updateTitle(item) {
-        console.log('editing item....');
+        console.log(`updating title...`);
+    }
+
+    editItem(item) {
+        console.log(`editing item....${item}`);
     }
 
     renderActions(item) {
