@@ -111,6 +111,7 @@ env.bak/
 venv.bak/
 checklist-env/
 clist-env/
+clister-env/
 
 # Spyder project settings
 .spyderproject
