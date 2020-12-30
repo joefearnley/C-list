@@ -66,3 +66,7 @@
 input.change-title {
     display: none;
 }
+
+h3.no-items {
+    color: white;
+}

@@ -96,7 +96,7 @@ export default class CheckList extends Component {
         this.loadItems();
     }
 
-    renderItems() {
+    renderList() {
         return this.state.items.map((item, i) => {
             return (
                     <ListGroup.Item key={i}>
@@ -112,11 +112,30 @@ export default class CheckList extends Component {
         });
     }
 
+    renderItems() {
+
+        if (this.state.items.length === 0) {
+            return (
+                <Col sm="8">
+                    <h3 className="no-items">You have no items yet. Click the plus button add one!</h3>
+                </Col>
+            )
+        }
+
+        return (
+            <Col lg>
+                <ListGroup>
+                    { this.renderList() }
+                </ListGroup>
+            </Col>
+        )
+    }
+
     render() {
         return (
             <div className="checklist">
                 <Container>
-                    <Row className="justify-content-md-center">
+                    <Row className="justify-content-md-center mb-5">
                         <Col sm="8">
                             <h2>Your CheckList <Check2Square /></h2>
                         </Col>
@@ -125,11 +144,7 @@ export default class CheckList extends Component {
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
-                        <Col lg>
-                            <ListGroup>
-                                { this.renderItems() }
-                            </ListGroup>
-                        </Col>
+                        { this.renderItems() }
                     </Row>
                 </Container>
 
