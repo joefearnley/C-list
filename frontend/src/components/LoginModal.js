@@ -52,10 +52,13 @@ class LoginModal extends Component {
             password: this.state.password
         })
         .then(res => {
+            console.log(res.data);
+            
             localStorage.setItem('token', res.data.token);
             this.props.history.push('/list');
         })
         .catch(err => {
+            console.log(err.response);
             if (err.response) {
                 this.setState(() => ({ showError: true }));
             }
