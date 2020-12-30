@@ -99,8 +99,8 @@ WSGI_APPLICATION = 'checklist.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'clister',
-        'USER': os.getenv('MYSQL_USERNAME'),
+        'NAME': os.getenv('MYSQL_NAME'),
+        'USER': os.getenv('MYSQL_USER'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD'),
     }
 }
