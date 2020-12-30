@@ -73,8 +73,6 @@ class AccountTest(TestCase):
 
         response = self.client.post('/api/v1/account/', data=post_data)
 
-        print(response.data)
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['username'], post_data['username'])
         self.assertEqual(response.data['email'], post_data['email'])

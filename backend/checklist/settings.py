@@ -102,17 +102,8 @@ DATABASES = {
         'NAME': 'clister',
         'USER': os.getenv('MYSQL_USERNAME'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD'),
-        'TEST': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'clister.test.db.sqlite3',
-            'USER': '',
-            'PASSWORD': '',
-        }
     }
 }
-
-if 'test' in sys.argv:
-    DATABASES['default']['TEST']['NAME'] = 'clister.test.db.sqlite3'
 
 
 # Password validation
