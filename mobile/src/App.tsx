@@ -14,6 +14,8 @@ import { alarm, list, settings } from 'ionicons/icons';
 import Upcoming from './pages/Upcoming';
 import Items from './pages/Items';
 import Settings from './pages/Settings';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -36,30 +38,38 @@ import './theme/variables.css';
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/upcoming" component={Upcoming} exact={true} />
-          <Route path="/items" component={Items} exact={true} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/" render={() => <Redirect to="/upcoming" />} exact={true} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="upcoming" href="/upcoming">
-            <IonIcon icon={alarm} />
-            <IonLabel>Upcoming</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="items" href="/items">
-            <IonIcon icon={list} />
-            <IonLabel>Items</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="settings" href="/settings">
-            <IonIcon icon={settings} />
-            <IonLabel>Settings</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
+    { false ? (
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/upcoming" component={Upcoming} exact={true} />
+            <Route path="/items" component={Items} exact={true} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/" render={() => <Redirect to="/upcoming" />} exact={true} />
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="upcoming" href="/upcoming">
+              <IonIcon icon={alarm} />
+              <IonLabel>Upcoming</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="items" href="/items">
+              <IonIcon icon={list} />
+              <IonLabel>Items</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="settings" href="/settings">
+              <IonIcon icon={settings} />
+              <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    ) :(
+        <IonReactRouter>
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+        </IonReactRouter>
+    )
+    }
   </IonApp>
 );
 
