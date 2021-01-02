@@ -63,7 +63,7 @@ export default class CheckList extends Component {
         .catch(e => console.log(e));
     }
 
-    deleteItem(item) {        
+    deleteItem(item) {
         apiClient.delete(`${config.API_URL}/items/${item.pk}/`)
         .then(res => {
             this.setState(state => {
