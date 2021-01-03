@@ -28,10 +28,13 @@ export default class CheckList extends Component {
     loadItems() {
         apiClient.get(`${config.API_URL}/items/`)
             .then(res => {
-                console.log(res)
-                //this.setState({ items: res.data });
+                this.setState({ items: res.data });
             })
-            .catch(e => console.log(e));
+            .catch(err => {
+                if(err.response) {
+                    // redirect to login page....
+                }
+            });
     }
 
     completeItem(item) {
@@ -114,11 +117,10 @@ export default class CheckList extends Component {
     }
 
     renderItems() {
-
         if (this.state.items.length === 0) {
             return (
                 <Col sm="12">
-                    <div className="no-items">You have no items yet. Click the plus button add one!</div>
+                    <div className="text-center no-items">You have no items yet. Click the plus button add one!</div>
                 </Col>
             )
         }
