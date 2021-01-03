@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import React, { Component } from 'react';
+import { Button, Modal, Form, FormFeedback } from 'shards-react';
 import apiClient from '../api';
 import config from '../config';
 
@@ -61,17 +59,17 @@ class AddItemModal extends Component {
                             <Form.Group controlId="formTitle">
                                 <Form.Label>Title</Form.Label>
                                 <Form.Control type="text" onChange={this.updateTitle} />
-                                <Form.Control.Feedback type="invalid">Please enter a title</Form.Control.Feedback>
+                                <FormFeedback type="invalid">Please enter a title</FormFeedback>
                             </Form.Group>
                             <Form.Group controlId="formDescription">
                                 <Form.Label>Description</Form.Label>
                                 <Form.Control type="text" onChange={this.updateDescription} />
-                                <Form.Control.Feedback type="invalid">Please enter a description</Form.Control.Feedback>
+                                <FormFeedback type="invalid">Please enter a description</FormFeedback>
                             </Form.Group>
                             <Form.Group controlId="formDueDate">
                                 <Form.Label>Due Date</Form.Label>
                                 <Form.Control type="date" onChange={this.updateDueDate} />
-                                <Form.Control.Feedback type="invalid">Please enter a due date</Form.Control.Feedback>
+                                <FormFeedback type="invalid">Please enter a due date</FormFeedback>
                             </Form.Group>
                         </Form>
                         <p className={this.state.showError ? 'show-error' : 'hide-error'}>Please enter a Title and Description.</p>

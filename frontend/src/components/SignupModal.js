@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import { 
+    Button,
+    Modal,
+    ModalBody,
+    ModalHeader,
+    ModalFooter,
+    Form,
+    FormGroup,
+    FormInput,
+    FormFeedback 
+} from "shards-react";
 import axios from 'axios';
 import config from "../config";
 import { withRouter } from 'react-router';
@@ -10,24 +18,24 @@ class SignupModal extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.handleShow = this.handleShow.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
         this.state = {
             username: '',
             email: '',
             password: '',
-            show: false
+            open: false
         };
     }
 
     handleClose = () => {
-        this.setState({ show: false });
+        this.setState({ open: false });
     }
 
-    handleShow = e => {
+    handleOpen = e => {
         e.preventDefault();
-        this.setState({ show: true });
+        this.setState({ open: true });
     }
 
     updateUsername = e => {
@@ -64,33 +72,31 @@ class SignupModal extends Component {
     render() {
         return (
             <div>
-                <p><a href="/signup" className="sign-up" onClick={this.handleShow}>Sign up</a></p>
-                <Modal show={this.state.show} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Create Account</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                <p><a href="/signup" className="sign-up" onClick={this.handleOpen}>Sign up</a></p>
+                <Modal open={this.state.open} onHide={this.handleClose}>
+                    <ModalHeader>Create Account</ModalHeader>
+                    <ModalBody>
                         <Form>
-                            <Form.Group controlId="formUsername">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control type="email" onChange={this.updateUsername} />
-                                <Form.Text className="d-none text-danger">Username has already been taken.</Form.Text>
-                            </Form.Group>
-                            <Form.Group controlId="formEmail">
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control type="email" onChange={this.updateEmail} />
-                                <Form.Text className="d-none text-danger">Please enter valid email address.</Form.Text>
-                            </Form.Group>
-                            <Form.Group controlId="formPassword">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" onChange={this.updatePassword} />
-                            </Form.Group>
+                            <FormGroup>
+                                <label htmlFor="username">Username</label>
+                                <FormInput id="username" type="text" onChange={this.updateUsername} />
+                                <FormFeedback className="d-none text-danger">Username has already been taken.</FormFeedback>
+                            </FormGroup>
+                            <FormGroup>
+                                <label htmlFor="email">Email address</label>
+                                <FormInput id="email" type="email" onChange={this.updateEmail} />
+                                <FormFeedback className="d-none text-danger">Please enter valid email address.</FormFeedback>
+                            </FormGroup>
+                            <FormGroup>
+                                <label htmlFor="email">Password</label>
+                                <FormInput id="password" type="password" onChange={this.updatePassword} />
+                            </FormGroup>
                         </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={this.submitForm}>Creact Account</Button>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant="primary" onClick={this.submitForm}>Sign up</Button>
                         <Button variant="secondary" onClick={this.handleClose}>Cancel</Button>
-                    </Modal.Footer>
+                    </ModalFooter>
                 </Modal>
             </div>
         );

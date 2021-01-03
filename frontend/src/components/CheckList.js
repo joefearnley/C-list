@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
-import { Check2Square, Check2, Trash, ArrowRepeat, Plus, PencilSquare } from 'react-bootstrap-icons';
-import Form from 'react-bootstrap/Form';
+import { Container, Row, Col, ListGroup, Button, FormInput } from 'shards-react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import apiClient from '../api';
 import config from "../config";
 import AddItemModal from './AddItemModal'
@@ -28,7 +28,8 @@ export default class CheckList extends Component {
     loadItems() {
         apiClient.get(`${config.API_URL}/items/`)
             .then(res => {
-                this.setState({ items: res.data });
+                console.log(res)
+                //this.setState({ items: res.data });
             })
             .catch(e => console.log(e));
     }
@@ -84,10 +85,10 @@ export default class CheckList extends Component {
 
     renderActions(item) {
         if (item.complete) {
-            return ( <Button variant="default" onClick={() => this.unCompleteItem(item)}><ArrowRepeat /></Button> );
+            return ( <Button variant="default" onClick={() => this.unCompleteItem(item)}>ArrowRepeat</Button> );
         }
 
-        return ( <Button variant="default" onClick={() => this.completeItem(item)}><Check2 /></Button> );
+        return ( <Button variant="default" onClick={() => this.completeItem(item)}>Check2 </Button> );
     }
 
     handleAddItemModal() {
@@ -101,11 +102,11 @@ export default class CheckList extends Component {
             return (
                     <ListGroup.Item key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
-                        <Form.Control type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } />
+                        <FormInput type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } />
                         <span className="float-right">
-                            <Button variant="default" onClick={() => this.editItem(item)}><PencilSquare /></Button>
+                            <Button variant="default" onClick={() => this.editItem(item)}>PencilSquare </Button>
                             { this.renderActions(item) }
-                            <Button variant="default" onClick={() => this.deleteItem(item)}><Trash /></Button>
+                            <Button variant="default" onClick={() => this.deleteItem(item)}>Trash</Button>
                         </span>
                     </ListGroup.Item>
                 )
@@ -116,8 +117,8 @@ export default class CheckList extends Component {
 
         if (this.state.items.length === 0) {
             return (
-                <Col sm="8">
-                    <h3 className="no-items">You have no items yet. Click the plus button add one!</h3>
+                <Col sm="12">
+                    <div className="no-items">You have no items yet. Click the plus button add one!</div>
                 </Col>
             )
         }
@@ -137,10 +138,12 @@ export default class CheckList extends Component {
                 <Container>
                     <Row className="justify-content-md-center mb-5">
                         <Col sm="8">
-                            <h2>Your CheckList <Check2Square /></h2>
+                            <h2>Your CheckList</h2>
                         </Col>
                         <Col sm="1">
-                            <p><Button variant="light" onClick={() => this.handleAddItemModal()}><Plus /></Button></p>
+                            <Button variant="light" onClick={() => this.handleAddItemModal()}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Button>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">

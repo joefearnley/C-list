@@ -1,7 +1,15 @@
-import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import React, { Component } from 'react';
+import { 
+    Button,
+    Modal,
+    ModalBody,
+    ModalHeader,
+    ModalFooter,
+    Form,
+    FormGroup,
+    FormInput,
+    FormFeedback 
+} from "shards-react";
 import apiClient from '../api';
 import config from "../config";
 import { withRouter } from 'react-router';
@@ -10,11 +18,11 @@ class LoginModal extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.handleShow = this.handleShow.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
         this.state = {
-            show: false,
+            open: false,
             username: '',
             email: '',
             password: '',
@@ -23,12 +31,12 @@ class LoginModal extends Component {
     }
 
     handleClose = () => {
-        this.setState({ show: false });
+        this.setState({ open: false });
     }
 
-    handleShow = e => {
+    handleOpen = e => {
         e.preventDefault();
-        this.setState({ show: true });
+        this.setState({ open: true });
     }
 
     updateUsername = e => {
@@ -66,31 +74,29 @@ class LoginModal extends Component {
         return (
             <div>
                 <p className="aleady-a-user">
-                    Already a user? <a href="/signin" className="sign-in" onClick={this.handleShow}> Sign in</a>
+                    Already a user? <a href="/signin" className="sign-in" onClick={this.handleOpen}> Sign in</a>
                 </p>
-                <Modal show={this.state.show} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Log In</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                <Modal open={this.state.open} onHide={this.handleClose}>
+                    <ModalHeader>Log In</ModalHeader>
+                    <ModalBody>
                         <Form>
-                            <Form.Group controlId="formUsername">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control type="text" onChange={this.updateUsername} />
-                                <Form.Control.Feedback type="invalid">Please enter Username</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group controlId="formPassword">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" onChange={this.updatePassword} />
-                                <Form.Control.Feedback type="invalid">Please enter password</Form.Control.Feedback>
-                            </Form.Group>
+                            <FormGroup>
+                                <label htmlFor="username">Username</label>
+                                <FormInput id="username" type="text" onChange={this.updateUsername} />
+                                <FormFeedback type="invalid">Please enter Username</FormFeedback>
+                            </FormGroup>
+                            <FormGroup>
+                                <label htmlFor="password">Password</label>
+                                <FormInput id="password" type="password" onChange={this.updatePassword} />
+                                <FormFeedback type="invalid">Please enter password</FormFeedback>
+                            </FormGroup>
                         </Form>
                         <p className={this.state.showError ? 'show-error' : 'hide-error'}>Your Username and Password do not match. Please try again.</p>
-                    </Modal.Body>
-                    <Modal.Footer>
+                    </ModalBody>
+                    <ModalFooter>
                         <Button variant="primary" onClick={this.submitForm}>Sign in</Button>
                         <Button variant="secondary" onClick={this.handleClose}>Cancel</Button>
-                    </Modal.Footer>
+                    </ModalFooter>
                 </Modal>
             </div>
         );
