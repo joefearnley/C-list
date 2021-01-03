@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
-import { Button, Modal, Form, FormFeedback } from 'shards-react';
 import apiClient from '../api';
 import config from '../config';
+import { 
+    Button,
+    Modal,
+    ModalBody,
+    ModalHeader,
+    ModalFooter,
+    Form,
+    FormGroup,
+    FormInput,
+    FormFeedback 
+} from "shards-react";
 
 class AddItemModal extends Component {
     constructor(props, context) {
@@ -42,7 +52,7 @@ class AddItemModal extends Component {
         })
         .catch(err => {
             if (err.response) {
-                    this.setState(() => ({ showError: true }));
+                this.setState(() => ({ showError: true }));
             }
         });
     }
@@ -51,33 +61,31 @@ class AddItemModal extends Component {
         return (
             <div>
                 <Modal show={this.props.show} onHide={this.props.handleAddItemModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Add Item</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                    <ModalHeader closeButton>Add Item</ModalHeader>
+                    <ModalBody>
                         <Form>
-                            <Form.Group controlId="formTitle">
-                                <Form.Label>Title</Form.Label>
-                                <Form.Control type="text" onChange={this.updateTitle} />
+                            <FormGroup controlId="formTitle">
+                                <label htmlFor="title">Title</label>
+                                <FormInput id="title" type="text" onChange={this.updateTitle} />
                                 <FormFeedback type="invalid">Please enter a title</FormFeedback>
-                            </Form.Group>
-                            <Form.Group controlId="formDescription">
-                                <Form.Label>Description</Form.Label>
-                                <Form.Control type="text" onChange={this.updateDescription} />
+                            </FormGroup>
+                            <FormGroup controlId="formDescription">
+                                <label htmlFor="description">Description</label>
+                                <FormInput id="description" type="text" onChange={this.updateDescription} />
                                 <FormFeedback type="invalid">Please enter a description</FormFeedback>
-                            </Form.Group>
-                            <Form.Group controlId="formDueDate">
-                                <Form.Label>Due Date</Form.Label>
-                                <Form.Control type="date" onChange={this.updateDueDate} />
+                            </FormGroup>
+                            <FormGroup controlId="formDueDate">
+                                <label htmlFor="due-date">Due Date</label>
+                                <FormInput id="due-date" type="date" onChange={this.updateDueDate} />
                                 <FormFeedback type="invalid">Please enter a due date</FormFeedback>
-                            </Form.Group>
+                            </FormGroup>
                         </Form>
                         <p className={this.state.showError ? 'show-error' : 'hide-error'}>Please enter a Title and Description.</p>
-                    </Modal.Body>
-                    <Modal.Footer>
+                    </ModalBody>
+                    <ModalFooter>
                         <Button variant="primary" onClick={this.submitForm}>Add</Button>
                         <Button variant="secondary" onClick={this.props.handleAddItemModal}>Cancel</Button>
-                    </Modal.Footer>
+                    </ModalFooter>
                 </Modal>
             </div>
         );

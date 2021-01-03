@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import apiClient from '../api';
+import config from "../config";
+import { withRouter } from 'react-router';
 import { 
     Button,
     Modal,
@@ -10,9 +13,6 @@ import {
     FormInput,
     FormFeedback 
 } from "shards-react";
-import apiClient from '../api';
-import config from "../config";
-import { withRouter } from 'react-router';
 
 class LoginModal extends Component {
     constructor(props, context) {
