@@ -3,6 +3,9 @@ import apiClient from '../../api';
 import config from "../../config";
 import { withRouter } from 'react-router';
 import { 
+    Container,
+    Row,
+    Col,
     Button,
     Form,
     FormGroup,
@@ -56,26 +59,32 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <p className="aleady-a-user">
-                    Already a user? <a href="/signin" className="sign-in" onClick={this.handleOpen}> Sign in</a>
-                </p>
-                <Form>
-                    <FormGroup>
-                        <label htmlFor="username">Username</label>
-                        <FormInput id="username" type="text" onChange={this.updateUsername} />
-                        <FormFeedback type="invalid">Please enter Username</FormFeedback>
-                    </FormGroup>
-                    <FormGroup>
-                        <label htmlFor="password">Password</label>
-                        <FormInput id="password" type="password" onChange={this.updatePassword} />
-                        <FormFeedback type="invalid">Please enter password</FormFeedback>
-                    </FormGroup>
-                </Form>
+                <Container>
+                    <Row className="justify-content-md-center mb-5">
+                        <Col sm="8">
+                            <p className="aleady-a-user">
+                                Don't have an account? <a href="/signup" className="sign-in" onClick={this.handleOpen}>Sign up</a>
+                            </p>
+                            <Form>
+                                <FormGroup>
+                                    <label htmlFor="username">Username</label>
+                                    <FormInput id="username" type="text" onChange={this.updateUsername} />
+                                    <FormFeedback type="invalid">Please enter Username</FormFeedback>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label htmlFor="password">Password</label>
+                                    <FormInput id="password" type="password" onChange={this.updatePassword} />
+                                    <FormFeedback type="invalid">Please enter password</FormFeedback>
+                                </FormGroup>
+                            </Form>
 
-                <p className={this.state.showError ? 'show-error' : 'hide-error'}>Your Username and Password do not match. Please try again.</p>
+                            <p className={this.state.showError ? 'show-error' : 'hide-error'}>Your Username and Password do not match. Please try again.</p>
 
-                <Button variant="primary" onClick={this.submitForm}>Sign in</Button>
-                <Button variant="secondary" onClick={this.handleClose}>Cancel</Button>
+                            <Button className="mr-2" theme="primary" onClick={this.submitForm}>Sign in</Button>
+                            <Button theme="secondary" onClick={this.handleClose}>Cancel</Button>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         );
     }
