@@ -19,22 +19,30 @@ class Login extends Component {
 
         this.state = {
             username: '',
-            email: '',
             password: '',
-            showError: ''
+            showUsernameError: false,
+            showPasswordError: false,
+            showNonFieldError: '',
+            nonFieldErrorMessage: '',
         };
     }
 
     updateUsername = e => {
-        this.setState({ username: e.target.value });
-    }
-
-    updateEmail = e => {
-        this.setState({ email: e.target.value });
+        if (e.target.value !== '') {
+            this.setState({
+                username: e.target.value,
+                showUsernameError: false
+            });
+        }
     }
 
     updatePassword = e => {
-        this.setState({ password: e.target.value });
+        if (e.target.value !== '') {
+            this.setState({ 
+                password: e.target.value,
+                showPasswordError: false
+            });
+        }
     }
 
     submitForm = e => {
@@ -51,7 +59,20 @@ class Login extends Component {
         })
         .catch(err => {
             if (err.response) {
-                this.setState(() => ({ showError: true }));
+                console.log(err.response.data);
+
+                if (err.response.data.username) {
+                    this.setState({ showUsernameError: true })
+                }
+
+                if (err.response.data.password) {
+                    this.setState({ showPasswordError: true })
+                }
+
+                this.setState(() => ({ 
+                    showNonFieldError: true,
+                    nonFieldErrorMessage: err.response.data.non_field_errors
+                }));
             }
         });
     }
@@ -60,28 +81,35 @@ class Login extends Component {
         return (
             <div>
                 <Container>
-                    <Row className="justify-content-md-center mb-5">
+                    <Row className="justify-content-md-center ">
+                        <Col sm="8">
+                            <h2 className="mb-5">Log in</h2>
+                            <Form>
+                                <FormGroup>
+                                    <label htmlFor="username">Username</label>
+                                    <FormInput invalid={ this.state.showUsernameError } id="username" type="text" onChange={this.updateUsername} />
+                                    <FormFeedback type="invalid">Please enter a username</FormFeedback>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label htmlFor="password">Password</label>
+                                    <FormInput invalid={ this.state.showPasswordError } id="password" type="password" onChange={this.updatePassword} />
+                                    <FormFeedback type="invalid">Please enter a password</FormFeedback>
+                                </FormGroup>
+                            </Form>
+
+                            <p className={this.state.showNonFieldError ? 'show-error' : 'hide-error'}>
+                                { this.state.nonFieldErrorMessage }
+                            </p>
+
+                            <Button className="mr-2" theme="primary" onClick={this.submitForm}>Sign in</Button>
+                            <Button theme="secondary" onClick={this.handleClose}>Cancel</Button>
+                        </Col>
+                    </Row>
+                    <Row className="justify-content-md-center">
                         <Col sm="8">
                             <p className="aleady-a-user">
                                 Don't have an account? <a href="/signup" className="sign-in" onClick={this.handleOpen}>Sign up</a>
                             </p>
-                            <Form>
-                                <FormGroup>
-                                    <label htmlFor="username">Username</label>
-                                    <FormInput id="username" type="text" onChange={this.updateUsername} />
-                                    <FormFeedback type="invalid">Please enter Username</FormFeedback>
-                                </FormGroup>
-                                <FormGroup>
-                                    <label htmlFor="password">Password</label>
-                                    <FormInput id="password" type="password" onChange={this.updatePassword} />
-                                    <FormFeedback type="invalid">Please enter password</FormFeedback>
-                                </FormGroup>
-                            </Form>
-
-                            <p className={this.state.showError ? 'show-error' : 'hide-error'}>Your Username and Password do not match. Please try again.</p>
-
-                            <Button className="mr-2" theme="primary" onClick={this.submitForm}>Sign in</Button>
-                            <Button theme="secondary" onClick={this.handleClose}>Cancel</Button>
                         </Col>
                     </Row>
                 </Container>
