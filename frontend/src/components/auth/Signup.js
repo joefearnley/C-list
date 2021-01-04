@@ -13,18 +13,32 @@ import {
     FormFeedback 
 } from "shards-react";
 
-class Login extends Component {
-    constructor(props) {
+class Signup extends Component {
+    constructor(props, context) {
         super(props);
+
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.state = {
             username: '',
+            email: '',
             password: '',
             showUsernameError: false,
+            showEmailError: false,
             showPasswordError: false,
             showNonFieldError: '',
             nonFieldErrorMessage: '',
         };
+    }
+
+    handleClose = () => {
+        this.setState({ open: false });
+    }
+
+    handleOpen = e => {
+        e.preventDefault();
+        this.setState({ open: true });
     }
 
     updateUsername = e => {
@@ -32,6 +46,15 @@ class Login extends Component {
             this.setState({
                 username: e.target.value,
                 showUsernameError: false
+            });
+        }
+    }
+
+    updateEmail = e => {
+        if (e.target.value !== '') {
+            this.setState({ 
+                email: e.target.value,
+                showEmailError: false
             });
         }
     }
@@ -49,13 +72,13 @@ class Login extends Component {
         e.preventDefault();
         this.setState({ showError: false });
 
-        apiClient.post(`${config.API_URL}/token-auth/`, {
+        apiClient.post(`${config.API_URL}/account/`, {
             username: this.state.username,
+            email: this.state.email,
             password: this.state.password
         })
         .then(res => {
-            localStorage.setItem('token', res.data.token);
-            this.props.history.push('/list');
+             this.props.history.push('/list');
         })
         .catch(err => {
             if (err.response) {
@@ -65,9 +88,14 @@ class Login extends Component {
                     this.setState({ showUsernameError: true })
                 }
 
+                if (err.response.data.email) {
+                    this.setState({ showEmailError: true })
+                }
+
                 if (err.response.data.password) {
                     this.setState({ showPasswordError: true })
                 }
+
 
                 this.setState(() => ({ 
                     showNonFieldError: true,
@@ -83,15 +111,19 @@ class Login extends Component {
                 <Container>
                     <Row className="justify-content-md-center">
                         <Col sm="8">
-                            <h2 className="mb-5">Log in</h2>
                             <Form>
                                 <FormGroup>
                                     <label htmlFor="username">Username</label>
                                     <FormInput invalid={ this.state.showUsernameError } id="username" type="text" onChange={this.updateUsername} />
-                                    <FormFeedback type="invalid">Please enter a username</FormFeedback>
+                                    <FormFeedback className="text-danger">Username has already been taken.</FormFeedback>
                                 </FormGroup>
                                 <FormGroup>
-                                    <label htmlFor="password">Password</label>
+                                    <label htmlFor="email">Email address</label>
+                                    <FormInput invalid={ this.state.showEmailError } id="email" type="email" onChange={this.updateEmail} />
+                                    <FormFeedback className="text-danger">Please enter valid email address.</FormFeedback>
+                                </FormGroup>
+                                <FormGroup>
+                                    <label htmlFor="email">Password</label>
                                     <FormInput invalid={ this.state.showPasswordError } id="password" type="password" onChange={this.updatePassword} />
                                     <FormFeedback type="invalid">Please enter a password</FormFeedback>
                                 </FormGroup>
@@ -101,14 +133,13 @@ class Login extends Component {
                                 { this.state.nonFieldErrorMessage }
                             </p>
 
-                            <Button className="mr-2" theme="primary" onClick={this.submitForm}>Sign in</Button>
-                            <Button theme="secondary" onClick={this.handleClose}>Cancel</Button>
+                            <Button className="mr-2" theme="primary" onClick={this.submitForm}>Sign up</Button>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
                         <Col sm="8">
                             <p className="aleady-a-user">
-                                Don't have an account? <a href="/signup" className="sign-in" onClick={this.handleOpen}>Sign up</a>
+                                Already have an account? <a href="/login" className="sign-in" onClick={this.handleOpen}>Log in</a>
                             </p>
                         </Col>
                     </Row>
@@ -118,4 +149,4 @@ class Login extends Component {
     }
 }
 
-export default withRouter(Login);
+export default withRouter(Signup);

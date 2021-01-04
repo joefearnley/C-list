@@ -8,7 +8,7 @@ import AddItemModal from './AddItemModal'
 
 export default class CheckList extends Component {
     constructor(props, context) {
-        super(props, context);
+        super(props);
 
         this.completeItem = this.completeItem.bind(this);
         this.unCompleteItem = this.unCompleteItem.bind(this);
