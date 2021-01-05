@@ -14,17 +14,9 @@
     margin-bottom: 0;
 }
 
-.home > div > p.aleady-a-user {
-    margin-top: 1em;
-    font-size: 0.6em;
-}
-
-.modal-header {
-    border-bottom: 0;
-}
-
-.modal-footer {
-    border-top: 0;
+.home > p.aleady-a-user {
+    margin-top: 0.5em;
+    font-size: 0.8em;
 }
 
 .row {

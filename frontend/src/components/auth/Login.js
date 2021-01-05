@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import apiClient from '../../api';
 import config from "../../config";
 import { withRouter } from 'react-router';
+import Navigation from '../Navigation';
 import { 
     Container,
     Row,
@@ -11,7 +12,7 @@ import {
     FormGroup,
     FormInput,
     FormFeedback 
-} from "shards-react";
+} from 'shards-react';
 
 class Login extends Component {
     constructor(props) {
@@ -80,10 +81,11 @@ class Login extends Component {
     render() {
         return (
             <div>
+                <Navigation />
                 <Container>
                     <Row className="justify-content-md-center">
                         <Col sm="8">
-                            <h2 className="mb-5">Log in</h2>
+                            <h3 className="mb-4">Log in to your Account</h3>
                             <Form>
                                 <FormGroup>
                                     <label htmlFor="username">Username</label>
@@ -101,14 +103,13 @@ class Login extends Component {
                                 { this.state.nonFieldErrorMessage }
                             </p>
 
-                            <Button className="mr-2" theme="primary" onClick={this.submitForm}>Sign in</Button>
-                            <Button theme="secondary" onClick={this.handleClose}>Cancel</Button>
+                            <Button className="mr-2" theme="primary" onClick={this.submitForm}>Log in</Button>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
                         <Col sm="8">
                             <p className="aleady-a-user">
-                                Don't have an account? <a href="/signup" className="sign-in" onClick={this.handleOpen}>Sign up</a>
+                                Don't have an account? <a href="/signup" className="sign-in">Sign up</a>
                             </p>
                         </Col>
                     </Row>

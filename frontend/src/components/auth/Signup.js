@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import apiClient from '../../api';
 import config from "../../config";
 import { withRouter } from 'react-router';
+import Navigation from '../Navigation';
 import { 
     Container,
     Row,
@@ -108,9 +109,11 @@ class Signup extends Component {
     render() {
         return (
             <div>
+                <Navigation />
                 <Container>
                     <Row className="justify-content-md-center">
                         <Col sm="8">
+                            <h3 className="mb-4">Sign up for an Account</h3>
                             <Form>
                                 <FormGroup>
                                     <label htmlFor="username">Username</label>
@@ -139,7 +142,7 @@ class Signup extends Component {
                     <Row className="justify-content-md-center">
                         <Col sm="8">
                             <p className="aleady-a-user">
-                                Already have an account? <a href="/login" className="sign-in" onClick={this.handleOpen}>Log in</a>
+                                Already have an account? <a href="/login" className="sign-in">Log in</a>
                             </p>
                         </Col>
                     </Row>
