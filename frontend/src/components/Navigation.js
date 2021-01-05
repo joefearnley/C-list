@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 import {
     Navbar,
-    NavbarToggler,
     NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
-    Collapse
+    NavLink
 } from 'shards-react';
 
 export default class Navigation extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <Navbar type="dark" theme="primary" expand="md">
@@ -28,5 +22,5 @@ export default class Navigation extends Component {
                 </Nav>
             </Navbar>
         );
-}
+    }
 }
