@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, ListGroup, Button, FormInput } from 'shards-react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import apiClient from '../api';
 import config from "../config";
-import AddItemModal from './AddItemModal'
+import Navigation from './Navigation';
+import AddItemModal from './AddItemModal';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faPlus, faRedo, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+    Container,
+    Row,
+    Col,
+    ListGroup,
+    ListGroupItem,
+    Button,
+    // FormInput
+} from 'shards-react';
 
 export default class CheckList extends Component {
     constructor(props, context) {
@@ -88,10 +97,18 @@ export default class CheckList extends Component {
 
     renderActions(item) {
         if (item.complete) {
-            return ( <Button variant="default" onClick={() => this.unCompleteItem(item)}>ArrowRepeat</Button> );
+            return ( 
+                <Button className="mr-2" size="sm" theme="secondary" onClick={() => this.unCompleteItem(item)}>
+                    <FontAwesomeIcon icon={faRedo} />
+                </Button>
+            );
         }
 
-        return ( <Button variant="default" onClick={() => this.completeItem(item)}>Check2 </Button> );
+        return ( 
+            <Button className="mr-2" size="sm" theme="secondary" onClick={() => this.completeItem(item)}>
+                <FontAwesomeIcon icon={faCheck} />
+            </Button> 
+        );
     }
 
     handleAddItemModal() {
@@ -103,15 +120,19 @@ export default class CheckList extends Component {
     renderList() {
         return this.state.items.map((item, i) => {
             return (
-                    <ListGroup.Item key={i}>
+                    <ListGroupItem key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
-                        <FormInput type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } />
+                        {/* <FormInput type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } /> */}
                         <span className="float-right">
-                            <Button variant="default" onClick={() => this.editItem(item)}>PencilSquare </Button>
+                            <Button size="sm" className="mr-2" theme="info" onClick={() => this.editItem(item)}>
+                                <FontAwesomeIcon icon={faEdit} />
+                            </Button>
                             { this.renderActions(item) }
-                            <Button variant="default" onClick={() => this.deleteItem(item)}>Trash</Button>
+                            <Button size="sm" className="mr-2" theme="danger" onClick={() => this.deleteItem(item)}>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </Button>
                         </span>
-                    </ListGroup.Item>
+                    </ListGroupItem>
                 )
         });
     }
@@ -137,13 +158,14 @@ export default class CheckList extends Component {
     render() {
         return (
             <div className="checklist">
+                <Navigation />
                 <Container>
                     <Row className="justify-content-md-center mb-5">
-                        <Col sm="8">
+                        <Col sm="9">
                             <h2>Your CheckList</h2>
                         </Col>
                         <Col sm="1">
-                            <Button variant="light" onClick={() => this.handleAddItemModal()}>
+                            <Button theme="light" onClick={() => this.handleAddItemModal()}>
                                 <FontAwesomeIcon icon={faPlus} />
                             </Button>
                         </Col>
@@ -153,7 +175,7 @@ export default class CheckList extends Component {
                     </Row>
                 </Container>
 
-                <AddItemModal show={this.state.showAddItemModal} handleAddItemModal={this.handleAddItemModal} />
+                <AddItemModal open={this.state.showAddItemModal} handleAddItemModal={this.handleAddItemModal} />
             </div>
         );
     }

@@ -60,8 +60,6 @@ class Login extends Component {
         })
         .catch(err => {
             if (err.response) {
-                console.log(err.response.data);
-
                 if (err.response.data.username) {
                     this.setState({ showUsernameError: true })
                 }
@@ -70,10 +68,12 @@ class Login extends Component {
                     this.setState({ showPasswordError: true })
                 }
 
-                this.setState(() => ({ 
-                    showNonFieldError: true,
-                    nonFieldErrorMessage: err.response.data.non_field_errors
-                }));
+                if (err.response.data.non_field_errors) {
+                    this.setState(() => ({ 
+                        showNonFieldError: true,
+                        nonFieldErrorMessage: err.response.data.non_field_errors
+                    }));
+                }
             }
         });
     }

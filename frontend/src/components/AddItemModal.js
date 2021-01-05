@@ -15,19 +15,26 @@ import {
 
 class AddItemModal extends Component {
     constructor(props, context) {
-        super(props, context);
+        super(props);
 
         this.state = {
-            show: this.props.show,
+            open: this.props.open,
             title: '',
             description: '',
             dueDate: '',
-            showError: ''
+            showTitleError: false,
+            nonfieldError: '',
+            showNonFieldError: false
         };
     }
 
     updateTitle = e => {
-        this.setState({ title: e.target.value });
+        if (e.target.value !== '') {
+            this.setState({
+                title: e.target.value,
+                showTitleError: false
+            });
+        }
     }
 
     updateDesciption = e => {
@@ -42,17 +49,40 @@ class AddItemModal extends Component {
         e.preventDefault();
         this.setState({ showError: false });
 
-        apiClient.post(`${config.API_URL}/items/`, {
+        let postData = {
             title: this.state.title,
-            description: this.state.description,
-            due_date: this.state.dueDate
-        })
+            description: this.state.description
+        };
+
+        if (this.state.dueDate) {
+            postData.due_date = this.state.dueDate;
+        }
+
+        apiClient.post(`${config.API_URL}/items/`, postData)
         .then(res => {
+            // reset add item form and close modal
+            this.setState({
+                title: '',
+                description: '',
+                dueDate: '',
+                showTitleError: false,
+                nonfieldError: '',
+                showNonFieldError: false
+            });
             this.props.handleAddItemModal();
         })
         .catch(err => {
             if (err.response) {
-                this.setState(() => ({ showError: true }));
+                if (err.response.data.title) {
+                    this.setState({ showTitleError: true })
+                }
+
+                if (err.response.data.non_field_errors) {
+                    this.setState(() => ({
+                        showNonFieldError: true,
+                        nonFieldErrorMessage: err.response.data.non_field_errors
+                    }));
+                }
             }
         });
     }
@@ -60,27 +90,28 @@ class AddItemModal extends Component {
     render() {
         return (
             <div>
-                <Modal show={this.props.show} onHide={this.props.handleAddItemModal}>
-                    <ModalHeader closeButton>Add Item</ModalHeader>
+                <Modal open={this.props.open} onHide={this.props.handleAddItemModal}>
+                    <ModalHeader>Add Item</ModalHeader>
                     <ModalBody>
                         <Form>
-                            <FormGroup controlId="formTitle">
+                            <FormGroup>
                                 <label htmlFor="title">Title</label>
-                                <FormInput id="title" type="text" onChange={this.updateTitle} />
+                                <FormInput invalid={ this.state.showTitleError } id="title" type="text" onChange={this.updateTitle} />
                                 <FormFeedback type="invalid">Please enter a title</FormFeedback>
                             </FormGroup>
-                            <FormGroup controlId="formDescription">
+                            <FormGroup>
                                 <label htmlFor="description">Description</label>
                                 <FormInput id="description" type="text" onChange={this.updateDescription} />
-                                <FormFeedback type="invalid">Please enter a description</FormFeedback>
                             </FormGroup>
-                            <FormGroup controlId="formDueDate">
+                            <FormGroup>
                                 <label htmlFor="due-date">Due Date</label>
                                 <FormInput id="due-date" type="date" onChange={this.updateDueDate} />
                                 <FormFeedback type="invalid">Please enter a due date</FormFeedback>
                             </FormGroup>
                         </Form>
-                        <p className={this.state.showError ? 'show-error' : 'hide-error'}>Please enter a Title and Description.</p>
+                        <p className={this.state.showNonFieldError ? 'show-error' : 'hide-error'}>
+                            { this.state.nonfieldError }
+                        </p>
                     </ModalBody>
                     <ModalFooter>
                         <Button variant="primary" onClick={this.submitForm}>Add</Button>

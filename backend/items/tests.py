@@ -79,7 +79,7 @@ class ItemListTest(APITestCase):
         post_data = {
             'title': 'Clean Garage',
             'description': 'Please clean the garage',
-            'due_date': self.due_date.strftime('%Y-%m-%d')
+            'due_date': ''
         }
 
         response = self.client.post('/api/v1/items/', data=post_data)
