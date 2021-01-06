@@ -20,18 +20,20 @@ class Login extends Component {
 
         this.state = {
             username: '',
+            email: '',
             password: '',
-            showUsernameError: false,
+            showEmailError: false,
             showPasswordError: false,
             showNonFieldError: '',
             nonFieldErrorMessage: '',
         };
     }
 
-    updateUsername = e => {
+    updateEmail = e => {
         if (e.target.value !== '') {
             this.setState({
                 username: e.target.value,
+                email: e.target.value,
                 showUsernameError: false
             });
         }
@@ -60,8 +62,8 @@ class Login extends Component {
         })
         .catch(err => {
             if (err.response) {
-                if (err.response.data.username) {
-                    this.setState({ showUsernameError: true })
+                if (err.response.data.email || err.response.data.username) {
+                    this.setState({ showEmailError: true })
                 }
 
                 if (err.response.data.password) {
@@ -88,9 +90,9 @@ class Login extends Component {
                             <h3 className="mb-4">Log in to your Account</h3>
                             <Form>
                                 <FormGroup>
-                                    <label htmlFor="username">Username</label>
-                                    <FormInput invalid={ this.state.showUsernameError } id="username" type="text" onChange={this.updateUsername} />
-                                    <FormFeedback type="invalid">Please enter a username</FormFeedback>
+                                    <label htmlFor="email">Email address</label>
+                                    <FormInput invalid={ this.state.showEmailError } id="email" type="text" onChange={this.updateEmail} />
+                                    <FormFeedback type="invalid">Please enter a valid email address</FormFeedback>
                                 </FormGroup>
                                 <FormGroup>
                                     <label htmlFor="password">Password</label>

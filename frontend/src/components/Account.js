@@ -20,26 +20,27 @@ class Account extends Component {
 
         this.state = {
             username: '',
+            email: '',
             password: '',
-            showUsernameError: false,
             showPasswordError: false,
             showNonFieldError: '',
             nonFieldErrorMessage: '',
         };
     }
 
-    updateUsername = e => {
+    updateEmail = e => {
         if (e.target.value !== '') {
-            this.setState({
+            this.setState({ 
                 username: e.target.value,
-                showUsernameError: false
+                email: e.target.value,
+                showEmailError: false
             });
         }
     }
 
     updatePassword = e => {
         if (e.target.value !== '') {
-            this.setState({ 
+            this.setState({
                 password: e.target.value,
                 showPasswordError: false
             });
@@ -60,8 +61,8 @@ class Account extends Component {
         })
         .catch(err => {
             if (err.response) {
-                if (err.response.data.username) {
-                    this.setState({ showUsernameError: true })
+                if (err.response.data.email) {
+                    this.setState({ showEmailError: true })
                 }
 
                 if (err.response.data.password) {
@@ -88,12 +89,12 @@ class Account extends Component {
                             <h3 className="mb-4">Account Information</h3>
                             <Form>
                                 <FormGroup>
-                                    <label htmlFor="username">Username</label>
-                                    <FormInput invalid={ this.state.showUsernameError } id="username" type="text" onChange={this.updateUsername} />
-                                    <FormFeedback type="invalid">Please enter a username</FormFeedback>
+                                    <label htmlFor="email">Email address</label>
+                                    <FormInput invalid={ this.state.showEmailError } id="email" type="email" onChange={this.updateEmail} />
+                                    <FormFeedback className="text-danger">Please enter valid email address.</FormFeedback>
                                 </FormGroup>
                                 <FormGroup>
-                                    <label htmlFor="password">Email</label>
+                                    <label htmlFor="email">Password</label>
                                     <FormInput invalid={ this.state.showPasswordError } id="password" type="password" onChange={this.updatePassword} />
                                     <FormFeedback type="invalid">Please enter a password</FormFeedback>
                                 </FormGroup>

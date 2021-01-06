@@ -116,11 +116,6 @@ class Signup extends Component {
                             <h3 className="mb-4">Sign up for an Account</h3>
                             <Form>
                                 <FormGroup>
-                                    <label htmlFor="username">Username</label>
-                                    <FormInput invalid={ this.state.showUsernameError } id="username" type="text" onChange={this.updateUsername} />
-                                    <FormFeedback className="text-danger">Username has already been taken.</FormFeedback>
-                                </FormGroup>
-                                <FormGroup>
                                     <label htmlFor="email">Email address</label>
                                     <FormInput invalid={ this.state.showEmailError } id="email" type="email" onChange={this.updateEmail} />
                                     <FormFeedback className="text-danger">Please enter valid email address.</FormFeedback>
