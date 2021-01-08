@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import apiClient from '../../api';
-import config from "../../config";
+import apiClient from '../api';
+import config from "../config";
 import { withRouter } from 'react-router';
 import Navigation from './Navigation';
 import { 
@@ -11,7 +11,7 @@ import {
     Form,
     FormGroup,
     FormInput,
-    FormFeedback 
+    FormFeedback
 } from 'shards-react';
 
 class Account extends Component {
@@ -26,6 +26,24 @@ class Account extends Component {
             showNonFieldError: '',
             nonFieldErrorMessage: '',
         };
+    }
+
+    componentDidMount() {
+        this.populateForm();
+    }
+
+    populateForm = e => {
+        apiClient.get(`${config.API_URL}/items/`)
+        .then(res => {
+            this.setState({
+                email: res.data.email,
+            });
+        })
+        .catch(err => {
+            if(err.response) {
+                // redirect to login page....
+            }
+        });
     }
 
     updateEmail = e => {

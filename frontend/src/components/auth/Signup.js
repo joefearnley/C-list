@@ -42,18 +42,10 @@ class Signup extends Component {
         this.setState({ open: true });
     }
 
-    updateUsername = e => {
+    updateEmail = e => {
         if (e.target.value !== '') {
             this.setState({
                 username: e.target.value,
-                showUsernameError: false
-            });
-        }
-    }
-
-    updateEmail = e => {
-        if (e.target.value !== '') {
-            this.setState({ 
                 email: e.target.value,
                 showEmailError: false
             });
@@ -83,12 +75,6 @@ class Signup extends Component {
         })
         .catch(err => {
             if (err.response) {
-                console.log(err.response.data);
-
-                if (err.response.data.username) {
-                    this.setState({ showUsernameError: true })
-                }
-
                 if (err.response.data.email) {
                     this.setState({ showEmailError: true })
                 }
