@@ -33,11 +33,14 @@ class Account extends Component {
     }
 
     populateForm = e => {
-        apiClient.get(`${config.API_URL}/items/`)
+        apiClient.get(`${config.API_URL}/account/`)
         .then(res => {
-            this.setState({
-                email: res.data.email,
-            });
+
+            console.log(res.data);
+
+            // this.setState({
+            //     email: res.data.email,
+            // });
         })
         .catch(err => {
             if(err.response) {
