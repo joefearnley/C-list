@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 
-class AccountTest(APITestCase):
+class AccountAuthTest(APITestCase):
 
     def setUp(self):
         self.username = 'joetest123@gmail.com'
@@ -51,6 +51,7 @@ class AccountTest(APITestCase):
         self.assertNotEqual(user_data['username'], user2.email)
 
 
+class AccountCreateTest(APITestCase):
     def test_cannot_create_account_when_username_not_provided(self):
         post_data = {
             'username': '',
@@ -68,7 +69,7 @@ class AccountTest(APITestCase):
 
     def test_cannot_create_account_when_email_not_provided(self):
         post_data = {
-            'username': 'jo3F123',
+            'username': 'jo3F123@gmail.com',
             'email': '',
             'password': 'secret123',
         }
@@ -83,7 +84,7 @@ class AccountTest(APITestCase):
 
     def test_cannot_create_account_when_email_not_valid(self):
         post_data = {
-            'username': 'jo3F123',
+            'username': 'jo3F123@gmail.com',
             'email': 'joeffoefijo',
             'password': 'secret123',
         }
@@ -98,7 +99,7 @@ class AccountTest(APITestCase):
 
     def test_cannot_create_account_when_password_not_provided(self):
         post_data = {
-            'username': 'jo3F123',
+            'username': 'jo3F123@gmail.com',
             'email': 'jo3F123@gmail.com',
             'password': '',
         }
@@ -113,7 +114,7 @@ class AccountTest(APITestCase):
 
     def test_can_create_account(self):
         post_data = {
-            'username': 'jo3F123',
+            'username': 'jo3F123@gmail.com',
             'email': 'jo3F123@gmail.com',
             'password': 'secret123',
         }
@@ -126,4 +127,7 @@ class AccountTest(APITestCase):
 
         user_in_database = User.objects.first()
 
-        print(user_in_database)
+        self.assertEqual(user_in_database.username, post_data['username'])
+        self.assertEqual(user_in_database.email, post_data['email'])
+
+
