@@ -51,20 +51,20 @@ class AccountTest(APITestCase):
         self.assertNotEqual(user_data['username'], user2.email)
 
 
-    # def test_cannot_create_account_when_username_not_provided(self):
-    #     post_data = {
-    #         'username': '',
-    #         'email': 'jo3F123@gmail.com',
-    #         'password': 'secret123',
-    #     }
+    def test_cannot_create_account_when_username_not_provided(self):
+        post_data = {
+            'username': '',
+            'email': 'jo3F123@gmail.com',
+            'password': 'secret123',
+        }
 
-    #     response = self.client.post('/api/v1/account/', data=post_data)
+        response = self.client.post('/api/v1/account/', data=post_data)
 
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #     self.assertEqual(
-    #         response.data.get('username')[0],
-    #         'This field may not be blank.'
-    #     )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data.get('username')[0],
+            'This field may not be blank.'
+        )
 
     # def test_cannot_create_account_when_email_not_provided(self):
     #     post_data = {
