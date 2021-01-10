@@ -12,8 +12,6 @@ router.register(r'groups', account_views.GroupViewSet)
 router.register(r'items', item_views.ItemViewSet)
 router.register(r'account', account_views.AccountViewSet)
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
