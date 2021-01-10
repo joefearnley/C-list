@@ -123,3 +123,7 @@ class AccountTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['username'], post_data['username'])
         self.assertEqual(response.data['email'], post_data['email'])
+
+        user_in_database = User.objects.first()
+
+        print(user_in_database)
