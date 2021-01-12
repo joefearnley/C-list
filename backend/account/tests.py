@@ -4,8 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 
-class AccountAuthTest(APITestCase):
-
+class AccountTest(APITestCase):
     def setUp(self):
         self.username = 'joetest123@gmail.com'
         self.password = 'secret'
@@ -22,14 +21,36 @@ class AccountAuthTest(APITestCase):
         self.token = Token.objects.create(user=self.user)
         self.token.save()
 
+    def authenticate_user(self):
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+
+class AccountAuthTest(AccountTest):
+
+    def setUp(self):
+        super(AccountAuthTest, self).setUp()
+
     def test_cannot_view_account_detail_if_not_authorized(self):
         response = self.client.get('/api/v1/account/')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_access_account_detail_that_does_not_belong_to_user(self):
+        self.authenticate_user()
+
+        response = self.client.get('/api/v1/account/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(1, len(response.data))
+
+        user_data = response.data[0]
+
+        self.assertEqual(user_data['username'], self.username)
+        self.assertEqual(user_data['email'], self.email)
+
     def test_cannot_access_account_detail_that_does_not_belong_to_user(self):
-        self.client.force_authenticate(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.authenticate_user()
 
         user2 = User.objects.create(
             username='jdoe123@gmail.com',
@@ -131,3 +152,55 @@ class AccountCreateTest(APITestCase):
         self.assertEqual(user_in_database.email, post_data['email'])
 
 
+class AccountUpdateTest(AccountTest):
+
+    def setUp(self):
+        super(AccountUpdateTest, self).setUp()
+        self.authenticate_user()
+
+    def test_cannot_update_account_when_username_not_provided(self):
+        post_data = {
+            'username': '',
+            'email': 'jo3F123@gmail.com',
+        }
+
+        response = self.client.post('/api/v1/account/', data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data.get('username')[0],
+            'This field may not be blank.'
+        )
+
+    def test_cannot_update_account_when_email_not_provided(self):
+        post_data = {
+            'username': 'jo3F123@gmail.com',
+            'email': '',
+        }
+
+        response = self.client.post('/api/v1/account/', data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data.get('email')[0],
+            'This field may not be blank.'
+        )
+
+    def test_can_update_email_address(self):
+        post_data = {
+            'username': 'jo3F123@gmail.com',
+            'email': '',
+        }
+
+        response = self.client.post('/api/v1/account/', data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data.get('email')[0],
+            'This field may not be blank.'
+        )
+
+        self.user.refresh_from_db()
+
+        self.assertEqual(user_in_database.username, post_data['username'])
+        self.assertEqual(user_in_database.email, post_data['email'])
