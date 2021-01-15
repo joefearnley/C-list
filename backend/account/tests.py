@@ -27,7 +27,6 @@ class AccountTest(APITestCase):
 
 
 class AccountAuthTest(AccountTest):
-
     def setUp(self):
         super(AccountAuthTest, self).setUp()
 
@@ -153,7 +152,6 @@ class AccountCreateTest(APITestCase):
 
 
 class AccountUpdateTest(AccountTest):
-
     def setUp(self):
         super(AccountUpdateTest, self).setUp()
         self.authenticate_user()
@@ -164,7 +162,7 @@ class AccountUpdateTest(AccountTest):
             'email': 'jo3F123@gmail.com',
         }
 
-        response = self.client.post('/api/v1/account/', data=post_data)
+        response = self.client.patch('/api/v1/account/%s/' % str(self.user.pk), data=post_data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -178,7 +176,7 @@ class AccountUpdateTest(AccountTest):
             'email': '',
         }
 
-        response = self.client.post('/api/v1/account/', data=post_data)
+        response = self.client.patch('/api/v1/account/%s/' % str(self.user.pk), data=post_data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -189,18 +187,28 @@ class AccountUpdateTest(AccountTest):
     def test_can_update_email_address(self):
         post_data = {
             'username': 'jo3F123@gmail.com',
-            'email': '',
+            'email': 'jo3F123@gmail.com',
         }
 
-        response = self.client.post('/api/v1/account/', data=post_data)
+        response = self.client.patch('/api/v1/account/%s/' % str(self.user.pk), data=post_data)
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.data.get('email')[0],
-            'This field may not be blank.'
-        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.user.refresh_from_db()
+        self.assertEqual(self.user.username, post_data['username'])
+        self.assertEqual(self.user.email, post_data['email'])
 
-        self.assertEqual(user_in_database.username, post_data['username'])
-        self.assertEqual(user_in_database.email, post_data['email'])
+
+class AccountChangePasswordTest(AccountTest):
+    def setUp(self):
+        super(AccountUpdateTest, self).setUp()
+        self.authenticate_user()
+
+    def test_cannot_change_password_when_password_not_provided(self):
+        pass
+
+    def test_cannot_change_password_when_password_confirmation_not_provided(self):
+        pass
+
+    def test_can_change_password(self):
+        pass
