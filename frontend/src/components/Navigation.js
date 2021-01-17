@@ -9,6 +9,11 @@ import {
 
 export default class Navigation extends Component {
 
+    logUserOut() {
+        localStorage.removeItem('token');
+        window.location = '/';
+    }
+
     render() {
         const isAuthenticated = localStorage.getItem('token');
         const pathName = window.location.pathname;
@@ -27,6 +32,11 @@ export default class Navigation extends Component {
                         <NavItem>
                             <NavLink active={ pathName === '/account' } disabled={ pathName === '/account' } href="/account">
                                 Account
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink href="/" onClick={ this.logUserOut }>
+                                Log out
                             </NavLink>
                         </NavItem>
                     </Nav>

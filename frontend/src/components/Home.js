@@ -5,7 +5,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 export default class Home extends Component {
 
     render() {
-        return (    
+        return (
             <div>
                 <header className="home">
                     <h1>C-lister <FontAwesomeIcon icon={faCheck} /></h1>
