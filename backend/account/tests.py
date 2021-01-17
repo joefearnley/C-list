@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
+from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 
@@ -201,14 +202,72 @@ class AccountUpdateTest(AccountTest):
 
 class AccountChangePasswordTest(AccountTest):
     def setUp(self):
-        super(AccountUpdateTest, self).setUp()
+        super(AccountChangePasswordTest, self).setUp()
         self.authenticate_user()
 
+    def test_can_change_password(self):
+        new_password = 'secret123'
+
+        post_data = {
+            'password': new_password,
+            'confirm_password': new_password,
+        }
+
+        response = self.client.post('/api/v1/account/%s/change-password/' % str(self.user.pk), data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data.get('message')[0],
+            'Password changed successfully.'
+        )
+
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(new_password))
+
     def test_cannot_change_password_when_password_not_provided(self):
-        pass
+        new_password = 'secret123'
+
+        post_data = {
+            'password': new_password,
+            'confirm_password': '',
+        }
+
+        response = self.client.post('/api/v1/account/%s/change-password/' % str(self.user.pk), data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data.get('password')[0],
+            'Please provide a password and password confirmation.'
+        )
 
     def test_cannot_change_password_when_password_confirmation_not_provided(self):
-        pass
+        new_password = 'secret123'
 
-    def test_can_change_password(self):
-        pass
+        post_data = {
+            'password': '',
+            'confirm_password': new_password,
+        }
+
+        response = self.client.post('/api/v1/account/%s/change-password/' % str(self.user.pk), data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data.get('password')[0],
+            'Please provide a password and password confirmation.'
+        )
+
+    def test_cannot_change_password_when_password_and_password_confirmation_do_not_match(self):
+        new_password = 'secret123'
+
+        post_data = {
+            'password': new_password,
+            'confirm_password': 'secret12345',
+        }
+
+        response = self.client.post('/api/v1/account/%s/change-password/' % str(self.user.pk), data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data.get('password')[0],
+            'Password and Password Confirmation do not match.'
+        )

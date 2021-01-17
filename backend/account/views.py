@@ -3,6 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserSerializer, GroupSerializer, AccountSerializer
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -29,3 +30,28 @@ class AccountViewSet(viewsets.ModelViewSet):
             self.permission_classes = [AllowAny,]
 
         return super(AccountViewSet, self).get_permissions()
+
+
+    @action(methods=['post'], detail=True, url_path='change-password', url_name='change_password')
+    def update_password(self, request, pk=None):
+        user = request.user
+
+        if request.data['password'] == '' or request.data['confirm_password'] == '' :
+            return Response({
+                'password': ['Please provide a password and password confirmation.']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if request.data['password'] != request.data['confirm_password'] :
+            return Response({
+                'password': ['Password and Password Confirmation do not match.']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.set_password(request.data['password'])
+        user.save()
+
+        return Response({
+            'message': ['Password changed successfully.']}, 
+            status=status.HTTP_200_OK
+        )
