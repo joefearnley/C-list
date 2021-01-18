@@ -25,6 +25,7 @@
 
 .list-group-item {
     line-height: 3;
+    border-bottom: 2px solid rgba(0,0,0,.125);
 }
 
 .hide-error {
