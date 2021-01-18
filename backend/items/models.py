@@ -10,7 +10,7 @@ class Item(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="items")
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
-    due_date = models.DateField()
+    due_date = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ["-created"]

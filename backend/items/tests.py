@@ -29,12 +29,12 @@ class ItemListTest(APITestCase):
         Item.objects.create(title='Clean Bathroom', description='Clean the Bathroom', user=self.user,
                             due_date=self.due_date)
 
-    def test_cannot_view_checklist_if_not_authorized(self):
+    def test_cannot_view_itemlist_if_not_authorized(self):
         response = self.client.get('/api/v1/items/')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_can_view_checklist_if_authorized(self):
+    def test_can_view_itemlist_if_authorized(self):
         self.client.force_authenticate(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
@@ -79,7 +79,7 @@ class ItemListTest(APITestCase):
         post_data = {
             'title': 'Clean Garage',
             'description': 'Please clean the garage',
-            'due_date': self.due_date.strftime('%Y-%m-%d')
+            'due_date': ''
         }
 
         response = self.client.post('/api/v1/items/', data=post_data)

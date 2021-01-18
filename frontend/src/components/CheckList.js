@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
-import { Check2Square, Check2, Trash, ArrowRepeat, Plus, PencilSquare } from 'react-bootstrap-icons';
-import Form from 'react-bootstrap/Form';
 import apiClient from '../api';
 import config from "../config";
-import AddItemModal from './AddItemModal'
+import Navigation from './Navigation';
+import AddItemModal from './AddItemModal';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faPlus, faRedo, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+    Container,
+    Row,
+    Col,
+    ListGroup,
+    ListGroupItem,
+    Button,
+    // FormInput
+} from 'shards-react';
 
 export default class CheckList extends Component {
     constructor(props, context) {
-        super(props, context);
+        super(props);
 
         this.completeItem = this.completeItem.bind(this);
         this.unCompleteItem = this.unCompleteItem.bind(this);
@@ -30,7 +39,11 @@ export default class CheckList extends Component {
             .then(res => {
                 this.setState({ items: res.data });
             })
-            .catch(e => console.log(e));
+            .catch(err => {
+                if(err.response) {
+                    // redirect to login page....
+                }
+            });
     }
 
     completeItem(item) {
@@ -63,7 +76,7 @@ export default class CheckList extends Component {
         .catch(e => console.log(e));
     }
 
-    deleteItem(item) {        
+    deleteItem(item) {
         apiClient.delete(`${config.API_URL}/items/${item.pk}/`)
         .then(res => {
             this.setState(state => {
@@ -84,10 +97,18 @@ export default class CheckList extends Component {
 
     renderActions(item) {
         if (item.complete) {
-            return ( <Button variant="default" onClick={() => this.unCompleteItem(item)}><ArrowRepeat /></Button> );
+            return ( 
+                <Button className="mr-2" size="sm" theme="secondary" onClick={() => this.unCompleteItem(item)}>
+                    <FontAwesomeIcon icon={faRedo} />
+                </Button>
+            );
         }
 
-        return ( <Button variant="default" onClick={() => this.completeItem(item)}><Check2 /></Button> );
+        return ( 
+            <Button className="mr-2" size="sm" theme="secondary" onClick={() => this.completeItem(item)}>
+                <FontAwesomeIcon icon={faCheck} />
+            </Button> 
+        );
     }
 
     handleAddItemModal() {
@@ -96,44 +117,65 @@ export default class CheckList extends Component {
         this.loadItems();
     }
 
-    renderItems() {
+    renderList() {
         return this.state.items.map((item, i) => {
             return (
-                    <ListGroup.Item key={i}>
+                    <ListGroupItem key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
-                        <Form.Control type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } />
+                        {/* <FormInput type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } /> */}
                         <span className="float-right">
-                            <Button variant="default" onClick={() => this.editItem(item)}><PencilSquare /></Button>
+                            <Button size="sm" className="mr-2" theme="info" onClick={() => this.editItem(item)}>
+                                <FontAwesomeIcon icon={faEdit} />
+                            </Button>
                             { this.renderActions(item) }
-                            <Button variant="default" onClick={() => this.deleteItem(item)}><Trash /></Button>
+                            <Button size="sm" className="mr-2" theme="danger" onClick={() => this.deleteItem(item)}>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </Button>
                         </span>
-                    </ListGroup.Item>
+                    </ListGroupItem>
                 )
         });
+    }
+
+    renderItems() {
+        if (this.state.items.length === 0) {
+            return (
+                <Col sm="12">
+                    <div className="text-center no-items">You have no items yet. Click the plus button add one!</div>
+                </Col>
+            )
+        }
+
+        return (
+            <Col lg>
+                <ListGroup>
+                    { this.renderList() }
+                </ListGroup>
+            </Col>
+        )
     }
 
     render() {
         return (
             <div className="checklist">
+                <Navigation />
                 <Container>
-                    <Row className="justify-content-md-center">
-                        <Col sm="8">
-                            <h2>Your CheckList <Check2Square /></h2>
+                    <Row className="justify-content-md-center mb-5">
+                        <Col sm="9">
+                            <h2>Your CheckList</h2>
                         </Col>
                         <Col sm="1">
-                            <p><Button variant="light" onClick={() => this.handleAddItemModal()}><Plus /></Button></p>
+                            <Button theme="light" onClick={() => this.handleAddItemModal()}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Button>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
-                        <Col lg>
-                            <ListGroup>
-                                { this.renderItems() }
-                            </ListGroup>
-                        </Col>
+                        { this.renderItems() }
                     </Row>
                 </Container>
 
-                <AddItemModal show={this.state.showAddItemModal} handleAddItemModal={this.handleAddItemModal} />
+                <AddItemModal open={this.state.showAddItemModal} handleAddItemModal={this.handleAddItemModal} />
             </div>
         );
     }

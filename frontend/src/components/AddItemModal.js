@@ -1,25 +1,40 @@
-import React, { Component } from 'react'
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import React, { Component } from 'react';
 import apiClient from '../api';
 import config from '../config';
+import { 
+    Button,
+    Modal,
+    ModalBody,
+    ModalHeader,
+    ModalFooter,
+    Form,
+    FormGroup,
+    FormInput,
+    FormFeedback 
+} from "shards-react";
 
 class AddItemModal extends Component {
     constructor(props, context) {
-        super(props, context);
+        super(props);
 
         this.state = {
-            show: this.props.show,
+            open: this.props.open,
             title: '',
             description: '',
             dueDate: '',
-            showError: ''
+            showTitleError: false,
+            nonfieldError: '',
+            showNonFieldError: false
         };
     }
 
     updateTitle = e => {
-        this.setState({ title: e.target.value });
+        if (e.target.value !== '') {
+            this.setState({
+                title: e.target.value,
+                showTitleError: false
+            });
+        }
     }
 
     updateDesciption = e => {
@@ -34,17 +49,40 @@ class AddItemModal extends Component {
         e.preventDefault();
         this.setState({ showError: false });
 
-        apiClient.post(`${config.API_URL}/items/`, {
+        let postData = {
             title: this.state.title,
-            description: this.state.description,
-            due_date: this.state.dueDate
-        })
+            description: this.state.description
+        };
+
+        if (this.state.dueDate) {
+            postData.due_date = this.state.dueDate;
+        }
+
+        apiClient.post(`${config.API_URL}/items/`, postData)
         .then(res => {
+            // reset add item form and close modal
+            this.setState({
+                title: '',
+                description: '',
+                dueDate: '',
+                showTitleError: false,
+                nonfieldError: '',
+                showNonFieldError: false
+            });
             this.props.handleAddItemModal();
         })
         .catch(err => {
             if (err.response) {
-                    this.setState(() => ({ showError: true }));
+                if (err.response.data.title) {
+                    this.setState({ showTitleError: true })
+                }
+
+                if (err.response.data.non_field_errors) {
+                    this.setState(() => ({
+                        showNonFieldError: true,
+                        nonFieldErrorMessage: err.response.data.non_field_errors
+                    }));
+                }
             }
         });
     }
@@ -52,34 +90,33 @@ class AddItemModal extends Component {
     render() {
         return (
             <div>
-                <Modal show={this.props.show} onHide={this.props.handleAddItemModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Add Item</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                <Modal open={this.props.open} onHide={this.props.handleAddItemModal}>
+                    <ModalHeader>Add Item</ModalHeader>
+                    <ModalBody>
                         <Form>
-                            <Form.Group controlId="formTitle">
-                                <Form.Label>Title</Form.Label>
-                                <Form.Control type="text" onChange={this.updateTitle} />
-                                <Form.Control.Feedback type="invalid">Please enter a title</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group controlId="formDescription">
-                                <Form.Label>Description</Form.Label>
-                                <Form.Control type="text" onChange={this.updateDescription} />
-                                <Form.Control.Feedback type="invalid">Please enter a description</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group controlId="formDueDate">
-                                <Form.Label>Due Date</Form.Label>
-                                <Form.Control type="date" onChange={this.updateDueDate} />
-                                <Form.Control.Feedback type="invalid">Please enter a due date</Form.Control.Feedback>
-                            </Form.Group>
+                            <FormGroup>
+                                <label htmlFor="title">Title</label>
+                                <FormInput invalid={ this.state.showTitleError } id="title" type="text" onChange={this.updateTitle} />
+                                <FormFeedback type="invalid">Please enter a title</FormFeedback>
+                            </FormGroup>
+                            <FormGroup>
+                                <label htmlFor="description">Description</label>
+                                <FormInput id="description" type="text" onChange={this.updateDescription} />
+                            </FormGroup>
+                            <FormGroup>
+                                <label htmlFor="due-date">Due Date</label>
+                                <FormInput id="due-date" type="date" onChange={this.updateDueDate} />
+                                <FormFeedback type="invalid">Please enter a due date</FormFeedback>
+                            </FormGroup>
                         </Form>
-                        <p className={this.state.showError ? 'show-error' : 'hide-error'}>Please enter a Title and Description.</p>
-                    </Modal.Body>
-                    <Modal.Footer>
+                        <p className={this.state.showNonFieldError ? 'show-error' : 'hide-error'}>
+                            { this.state.nonfieldError }
+                        </p>
+                    </ModalBody>
+                    <ModalFooter>
                         <Button variant="primary" onClick={this.submitForm}>Add</Button>
                         <Button variant="secondary" onClick={this.props.handleAddItemModal}>Cancel</Button>
-                    </Modal.Footer>
+                    </ModalFooter>
                 </Modal>
             </div>
         );
