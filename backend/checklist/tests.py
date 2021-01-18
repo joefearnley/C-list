@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class AuthenticateTest(APITestCase):
     def setUp(self):
-        self.username = 'joe'
+        self.username = 'joetest123@gmail.com'
         self.password = 'secret'
         self.email = 'joetest123@gmail.com'
 
