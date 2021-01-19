@@ -15,8 +15,6 @@ import sys
 from dotenv import load_dotenv
 
 
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -74,7 +72,6 @@ CORS_ORIGIN_WHITELIST = [
 
 TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
 
-
 ROOT_URLCONF = 'checklist.urls'
 
 TEMPLATES = [
@@ -106,6 +103,7 @@ DATABASES = {
         'NAME': os.getenv('MYSQL_NAME'),
         'USER': os.getenv('MYSQL_USER'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+
     }
 }
 
