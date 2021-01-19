@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 
 
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -68,7 +69,7 @@ MIDDLEWARE = [
 #CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'https://c-lister.herokuapp.com/'
+    'https://c-lister.herokuapp.com'
 ]
 
 TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
@@ -101,6 +102,7 @@ WSGI_APPLICATION = 'checklist.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'HOST': os.getenv('MYSQL_HOST'),
         'NAME': os.getenv('MYSQL_NAME'),
         'USER': os.getenv('MYSQL_USER'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD'),
