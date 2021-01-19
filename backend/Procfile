@@ -1,4 +1,4 @@
 
 release: python manage.py migrate
 
-web: gunicorn c-lister.wsgi --log-file -
+web: gunicorn checklist.wsgi --log-file -
