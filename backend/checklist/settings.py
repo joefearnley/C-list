@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 from dotenv import load_dotenv
+from django.db.backends.mysql.base import DatabaseWrapper
 
+DatabaseWrapper.data_types['DateTimeField'] = 'datetime' # fix for MySQL 5.5
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
