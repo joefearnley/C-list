@@ -57,7 +57,7 @@ class Login extends Component {
             password: this.state.password
         })
         .then(res => {
-            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('auth_token', res.data.token);
             this.props.history.push('/list');
         })
         .catch(err => {
