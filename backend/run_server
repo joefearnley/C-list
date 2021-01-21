@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# source ./checklist-env/bin/activate
+
+../c-lister-env/bin/python manage.py runserver --settings=checklist.settings

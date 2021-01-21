@@ -10,7 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
 
-    const isAuthenticated = localStorage.getItem('token');
+    const isAuthenticated = localStorage.getItem('auth_token');
 
     return (
         <Router>

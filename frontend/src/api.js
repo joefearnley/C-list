@@ -10,7 +10,7 @@ const defaultOptions = {
 
 let instance = axios.create(defaultOptions);
 instance.interceptors.request.use(config => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('auth_token');
         config.headers.Authorization =  token ? `Token ${token}` : null;
         return config;
     },

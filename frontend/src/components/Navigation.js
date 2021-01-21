@@ -10,12 +10,12 @@ import {
 export default class Navigation extends Component {
 
     logUserOut() {
-        localStorage.removeItem('token');
+        localStorage.removeItem('auth_token');
         window.location = '/';
     }
 
     render() {
-        const isAuthenticated = localStorage.getItem('token');
+        const isAuthenticated = localStorage.getItem('auth_token');
         const pathName = window.location.pathname;
 
         return (

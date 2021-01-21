@@ -24,7 +24,7 @@ class Login extends Component {
             password: '',
             showEmailError: false,
             showPasswordError: false,
-            showNonFieldError: '',
+            showNonFieldError: false,
             nonFieldErrorMessage: '',
         };
     }
@@ -34,16 +34,19 @@ class Login extends Component {
             this.setState({
                 username: e.target.value,
                 email: e.target.value,
-                showUsernameError: false
+                showUsernameError: false,
+                showNonFieldError: false
             });
         }
     }
 
     updatePassword = e => {
+
         if (e.target.value !== '') {
             this.setState({ 
                 password: e.target.value,
-                showPasswordError: false
+                showPasswordError: false,
+                showNonFieldError: false
             });
         }
     }
