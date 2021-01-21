@@ -1,7 +1,0 @@
-#!/bin/bash
-#
-source ./checklist-env/bin/activate
-
-./checklist-env/bin/python backend/manage.py runserver 
-# & 
-# cd frontend && npm start
