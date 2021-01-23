@@ -13,7 +13,7 @@ function App() {
     const isAuthenticated = localStorage.getItem('auth_token');
 
     return (
-        <Router  basename={window.location.pathname || ''}>
+        <Router basename={window.location.pathname || ''}>
             <Switch>
                 <Route path="/" exact>
                     {isAuthenticated ? <Redirect to="/list" /> : <Home />} 
