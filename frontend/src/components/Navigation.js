@@ -20,17 +20,17 @@ export default class Navigation extends Component {
 
         return (
             <Navbar type="dark" theme="primary" expand="md">
-                <NavbarBrand href="/">C-lister</NavbarBrand>
+                <NavbarBrand to="/">C-lister</NavbarBrand>
 
                 { isAuthenticated ? 
                     <Nav navbar className="ml-auto">
                         <NavItem>
-                            <NavLink active={ pathName === '/list' } disabled={ pathName === '/list' } href="/list">
+                            <NavLink active={ pathName === '/list' } disabled={ pathName === '/list' } to="/list">
                                 Checklist
                             </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink active={ pathName === '/account' } disabled={ pathName === '/account' } href="/account">
+                            <NavLink active={ pathName === '/account' } disabled={ pathName === '/account' } to="/account">
                                 Account
                             </NavLink>
                         </NavItem>

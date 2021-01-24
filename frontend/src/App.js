@@ -13,15 +13,15 @@ function App() {
     const isAuthenticated = localStorage.getItem('auth_token');
 
     return (
-        <Router basename={window.location.pathname || ''}>
+        <Router basename={'/C-lister'}>
             <Switch>
-                <Route path="/" exact>
-                    {isAuthenticated ? <Redirect to="/list" /> : <Home />} 
+                <Route path={`${process.env.PUBLIC_URL}/`} exact>
+                    {isAuthenticated ? <Redirect path={`${process.env.PUBLIC_URL}/list`} /> : <Home />}
                 </Route>
-                <Route path="/login" exact component={Login} />
-                <Route path="/signup" exact component={Signup} />
-                <ProtectedRoute path ="/list" exact component={CheckList} />
-                <ProtectedRoute path ="/account" exact component={Account} />
+                <Route path={`${process.env.PUBLIC_URL}/login`} exact component={Login} />
+                <Route path={`${process.env.PUBLIC_URL}/signup`} exact component={Signup} />
+                <ProtectedRoute path={`${process.env.PUBLIC_URL}/list`} exact component={CheckList} />
+                <ProtectedRoute path={`${process.env.PUBLIC_URL}/account`} exact component={Account} />
             </Switch>
         </Router>
     );
