@@ -15,13 +15,13 @@ function App() {
     return (
         <Router basename={'/C-lister'}>
             <Switch>
-                <Route path={`${process.env.PUBLIC_URL}/`} exact>
+                <Route path={`${process.env.PUBLIC_URL}/`}>
                     {isAuthenticated ? <Redirect path={`${process.env.PUBLIC_URL}/list`} /> : <Home />}
                 </Route>
-                <Route path={`${process.env.PUBLIC_URL}/login`} exact component={Login} />
-                <Route path={`${process.env.PUBLIC_URL}/signup`} exact component={Signup} />
-                <ProtectedRoute path={`${process.env.PUBLIC_URL}/list`} exact component={CheckList} />
-                <ProtectedRoute path={`${process.env.PUBLIC_URL}/account`} exact component={Account} />
+                <Route path={`${process.env.PUBLIC_URL}/login`} component={Login} />
+                <Route path={`${process.env.PUBLIC_URL}/signup`} component={Signup} />
+                <ProtectedRoute path={`${process.env.PUBLIC_URL}/list`} component={CheckList} />
+                <ProtectedRoute path={`${process.env.PUBLIC_URL}/account`} component={Account} />
             </Switch>
         </Router>
     );
