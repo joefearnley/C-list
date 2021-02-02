@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Home from './components/Home';
 import CheckList from './components/CheckList';
 import Login from './components/auth/Login';
@@ -9,20 +9,19 @@ import Account from './components/Account';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-
-    const isAuthenticated = localStorage.getItem('auth_token');
+    const authToken = localStorage.getItem('auth_token');
+    const isAuthenticated = authToken ? true : false;
 
     return (
         <Router basename={'/C-lister'}>
-            <Switch>
-                <Route path={`${process.env.PUBLIC_URL}/`}>
-                    {isAuthenticated ? <Redirect path={`${process.env.PUBLIC_URL}/list`} /> : <Home />}
-                </Route>
-                <Route path={`${process.env.PUBLIC_URL}/login`} component={Login} />
-                <Route path={`${process.env.PUBLIC_URL}/signup`} component={Signup} />
-                <ProtectedRoute path={`${process.env.PUBLIC_URL}/list`} component={CheckList} />
-                <ProtectedRoute path={`${process.env.PUBLIC_URL}/account`} component={Account} />
-            </Switch>
+            <Route path='/'>
+                {isAuthenticated ? <Redirect to='/list' /> : <Home />}
+            </Route>
+            <Route path='/login' component={Login} />
+            <Route path='/signup' component={Signup} />
+            <ProtectedRoute path='/list' component={CheckList} />
+            <ProtectedRoute path='/account' component={Account} />
+
         </Router>
     );
 }

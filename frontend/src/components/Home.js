@@ -6,20 +6,22 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 export default class Home extends Component {
 
     render() {
+        console.log('rendering home....');
+
         return (
             <div>
                 <header className="home">
                     <h1>C-lister <FontAwesomeIcon icon={faCheck} /></h1>
                     <p>Check those things off the list.</p>
                     <p>
-                        <Link to={`${process.env.PUBLIC_URL}/signup`} className="sign-up">
+                        <Link to={`/signup`} className="sign-up">
                             Sign up
                         </Link>
                     </p>
                     <p className="aleady-a-user">
                         Already a user? 
-                        <Link to={`${process.env.PUBLIC_URL}/login`} className="sign-up" onClick={this.handleOpen}>
-                            Log in
+                        <Link to={`/login`} className="sign-up" onClick={this.handleOpen}>
+                            <span className="ml-2">Log in</span>
                         </Link>
                     </p>
                 </header>

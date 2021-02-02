@@ -29,6 +29,10 @@ class Login extends Component {
         };
     }
 
+    componentDidMount() {
+        console.log('mounting login icomponent.....');
+    }
+
     updateEmail = e => {
         if (e.target.value !== '') {
             this.setState({
@@ -84,6 +88,8 @@ class Login extends Component {
     }
 
     render() {
+        console.log('rendering login....');
+
         return (
             <div>
                 <Navigation />

@@ -1,4 +1,4 @@
-# Checklist
+# C-list
 Check those things off the list
 
 My attempt to build an app using React for the frontend and Django/Django REST Framework for the backend.
@@ -9,44 +9,39 @@ My attempt to build an app using React for the frontend and Django/Django REST F
 
 Create a virtual environment
 
-`$> python3 -m venv checklist-env`
+`$> python3 -m venv c-list-env`
 
 Activate the virtual environment
 
-`$> source checklist-env/bin/activate`
+`$> source c-list-env/bin/activate`
 
 Install requirements
 
-`(checklist-env) $> ./checklist-env/bin/pip install -r requirements.txt`
+`(c-list-env) $> ./c-list-env/bin/pip install -r requirements.txt`
 
 Run migrations
 
-`(checklist-env) $> cd backend`
+`(c-list-env) $> cd backend`
 
-`(checklist-env) $/backend> ./manage.py makemigrations`
+`(c-list-env) $/backend> ./manage.py makemigrations`
 
-`(checklist-env) $/backend> ./manage.py migrate`
+`(c-list-env) $/backend> ./manage.py migrate`
 
 Create super user
-`(checklist-env) $/backend> ./manage.py createsuperuser`
+`(c-list-env) $/backend> ./manage.py createsuperuser`
 
 ### Frontend
 
 Install Dependencies
 
-`(checklist-env) $> cd frontend`
+`(c-list-env) $> cd frontend`
 
-`(checklist-env) $/frontend> npm install`
+`(c-list-env) $/frontend> npm install`
 
 Run app
 
-`(checklist-env) $/frontend> npm start`
+`(c-list-env) $/frontend> npm start`
 
 TODO:
-- Account registration
-- Account section
- - change email
- - change password
  - delete account
-
-- Email notifications for Account section updates
+ - email notifications for Account section updates
