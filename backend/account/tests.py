@@ -271,3 +271,19 @@ class AccountChangePasswordTest(AccountTest):
             response.data.get('password')[0],
             'Password and Password Confirmation do not match.'
         )
+
+
+class AccountDeleteTest(AccountTest):
+    def setUp(self):
+        super(AccountDeleteTest, self).setUp()
+        self.authenticate_user()
+
+    def test_can_delete_user_account(self):
+
+        self.assertEqual(User.objects.count(), 1)
+
+        response = self.client.delete('/api/v1/account/%s/' % str(self.user.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        self.assertEqual(User.objects.count(), 0)

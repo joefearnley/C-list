@@ -88,8 +88,6 @@ class Login extends Component {
     }
 
     render() {
-        console.log('rendering login....');
-
         return (
             <div>
                 <Navigation />
