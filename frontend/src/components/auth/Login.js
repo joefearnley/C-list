@@ -88,6 +88,8 @@ class Login extends Component {
     }
 
     render() {
+        console.log('rendering login icomponent.....');
+
         return (
             <div>
                 <Navigation />
