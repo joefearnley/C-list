@@ -6,8 +6,6 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 export default class Home extends Component {
 
     render() {
-        console.log('rendering home....');
-
         return (
             <div>
                 <header className="home">
