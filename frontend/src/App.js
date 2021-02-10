@@ -13,7 +13,7 @@ function App() {
     const isAuthenticated = authToken ? true : false;
 
     return (
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
             <Switch>
                 <Route path="/" exact>
                     {isAuthenticated ? <Redirect to="/list" /> : <Home />} 

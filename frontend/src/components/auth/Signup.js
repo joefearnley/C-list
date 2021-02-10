@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import apiClient from '../../api';
 import config from "../../config";
 import { withRouter } from 'react-router';
@@ -123,7 +124,7 @@ class Signup extends Component {
                     <Row className="justify-content-md-center">
                         <Col sm="8">
                             <p className="aleady-a-user">
-                                Already have an account? <a href="/login" className="sign-in">Log in</a>
+                                Already have an account? <Link to={`/login`} className="sign-up">Log in</Link>
                             </p>
                         </Col>
                     </Row>

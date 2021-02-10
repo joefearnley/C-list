@@ -11,7 +11,7 @@ export default class Navigation extends Component {
 
     logUserOut() {
         localStorage.removeItem('auth_token');
-        window.location = '/';
+        window.location = '/C-lister/';
     }
 
     render() {
@@ -20,22 +20,22 @@ export default class Navigation extends Component {
 
         return (
             <Navbar type="dark" theme="primary" expand="md">
-                <NavbarBrand to="/">C-lister</NavbarBrand>
+                <NavbarBrand href="/C-lister/">C-lister</NavbarBrand>
 
                 { isAuthenticated ? 
                     <Nav navbar className="ml-auto">
                         <NavItem>
-                            <NavLink active={ pathName === '/list' } disabled={ pathName === '/list' } to="/list">
+                            <NavLink active={ pathName === '/C-lister/list' } disabled={ pathName === '/C-lister/list' } href={`/C-lister/list`}>
                                 Checklist
                             </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink active={ pathName === '/account' } disabled={ pathName === '/account' } to="/account">
+                            <NavLink active={ pathName === '/C-lister/account' } disabled={ pathName === '/C-lister/account' } href={`/C-lister/account`}>
                                 Account
                             </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href="/" onClick={ this.logUserOut }>
+                            <NavLink href="/C-lister/" onClick={ this.logUserOut }>
                                 Log out
                             </NavLink>
                         </NavItem>
