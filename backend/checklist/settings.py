@@ -73,7 +73,8 @@ MIDDLEWARE = [
 #CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'https://c-lister.herokuapp.com'
+    'https://c-lister.herokuapp.com',
+    'http://joefearnley.com'
 ]
 
 TEST_RUNNER = "redgreenunittest.django.runner.RedGreenDiscoverRunner"
