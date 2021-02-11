@@ -143,13 +143,25 @@ class AccountCreateTest(APITestCase):
         response = self.client.post('/api/v1/account/', data=post_data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['username'], post_data['username'])
-        self.assertEqual(response.data['email'], post_data['email'])
+        self.assertEqual(response.data['user']['username'], post_data['username'])
+        self.assertEqual(response.data['user']['email'], post_data['email'])
 
         user_in_database = User.objects.first()
 
         self.assertEqual(user_in_database.username, post_data['username'])
         self.assertEqual(user_in_database.email, post_data['email'])
+
+    def test_creating_account_returns_auth_token(self):
+        post_data = {
+            'username': 'jo3F123@gmail.com',
+            'email': 'jo3F123@gmail.com',
+            'password': 'secret123',
+        }
+
+        response = self.client.post('/api/v1/account/', data=post_data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertNotEqual(response.data.get('token'), None)
 
 
 class AccountUpdateTest(AccountTest):
@@ -279,11 +291,9 @@ class AccountDeleteTest(AccountTest):
         self.authenticate_user()
 
     def test_can_delete_user_account(self):
-
         self.assertEqual(User.objects.count(), 1)
 
         response = self.client.delete('/api/v1/account/%s/' % str(self.user.pk))
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
         self.assertEqual(User.objects.count(), 0)

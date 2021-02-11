@@ -72,7 +72,8 @@ class Signup extends Component {
             password: this.state.password
         })
         .then(res => {
-             this.props.history.push('/list');
+            localStorage.setItem('auth_token', res.data.token);
+            this.props.history.push('/list');
         })
         .catch(err => {
             if (err.response) {

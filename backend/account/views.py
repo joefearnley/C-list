@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, Group
+from rest_framework.authtoken.models import Token
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserSerializer, GroupSerializer, AccountSerializer
@@ -31,6 +32,24 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return super(AccountViewSet, self).get_permissions()
 
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.perform_create(serializer)
+
+        token = Token.objects.create(user=user)
+        token.save()
+
+        return Response({
+                'user': serializer.data,
+                'token': token.key
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            return serializer.save()
 
     @action(methods=['post'], detail=True, url_path='change-password', url_name='change_password')
     def update_password(self, request, pk=None):
@@ -38,13 +57,15 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         if request.data['password'] == '' or request.data['confirm_password'] == '' :
             return Response({
-                'password': ['Please provide a password and password confirmation.']},
+                    'password': ['Please provide a password and password confirmation.']
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         if request.data['password'] != request.data['confirm_password'] :
             return Response({
-                'password': ['Password and Password Confirmation do not match.']},
+                    'password': ['Password and Password Confirmation do not match.']
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -52,6 +73,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         user.save()
 
         return Response({
-            'message': ['Password changed successfully.']}, 
+                'message': ['Password changed successfully.']
+            },
             status=status.HTTP_200_OK
         )
