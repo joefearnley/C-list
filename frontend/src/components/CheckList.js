@@ -23,10 +23,12 @@ export default class CheckList extends Component {
         this.unCompleteItem = this.unCompleteItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
         this.handleAddItemModal = this.handleAddItemModal.bind(this);
+        this.handleEditItemModal = this.handleEditItemModal.bind(this);
 
         this.state = {
             items: [],
-            showAddItemModal: false
+            showAddItemModal: false,
+            showEditItemModal: false
         };
     }
 
@@ -40,8 +42,8 @@ export default class CheckList extends Component {
                 this.setState({ items: res.data });
             })
             .catch(err => {
-                if(err.response) {
-                    // redirect to login page....
+                if (err.response) {
+                    console.log(err.response);
                 }
             });
     }
@@ -117,12 +119,18 @@ export default class CheckList extends Component {
         this.loadItems();
     }
 
+    handleEditItemModal() {
+        let showModal = !this.state.showEditItemModal;
+        this.setState({ showAddItemModal: showModal });
+        this.loadItems();
+    }
+
     renderList() {
         return this.state.items.map((item, i) => {
             return (
                     <ListGroupItem key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
-                        {/* <FormInput type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } /> */}
+                        <FormInput type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } />
                         <span className="float-right">
                             <Button size="sm" className="mr-2" theme="info" onClick={() => this.editItem(item)}>
                                 <FontAwesomeIcon icon={faEdit} />
