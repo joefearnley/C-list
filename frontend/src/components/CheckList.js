@@ -3,6 +3,7 @@ import apiClient from '../api';
 import config from "../config";
 import Navigation from './Navigation';
 import AddItemModal from './AddItemModal';
+import EditItemModal from './EditItemModal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlus, faRedo, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -12,7 +13,6 @@ import {
     ListGroup,
     ListGroupItem,
     Button,
-    // FormInput
 } from 'shards-react';
 
 export default class CheckList extends Component {
@@ -28,7 +28,8 @@ export default class CheckList extends Component {
         this.state = {
             items: [],
             showAddItemModal: false,
-            showEditItemModal: false
+            showEditItemModal: false,
+            itemEditingId: null,
         };
     }
 
@@ -80,21 +81,13 @@ export default class CheckList extends Component {
 
     deleteItem(item) {
         apiClient.delete(`${config.API_URL}/items/${item.pk}/`)
-        .then(res => {
-            this.setState(state => {
-                const items = state.items.filter(i => i.pk !== item.pk);
-                return { items };
-            });
-        })
-        .catch(e => console.log(e));
-    }
-
-    updateTitle(item) {
-        console.log(`updating title...`);
-    }
-
-    editItem(item) {
-        console.log(`editing item....${item}`);
+            .then(res => {
+                this.setState(state => {
+                    const items = state.items.filter(i => i.pk !== item.pk);
+                    return { items };
+                });
+            })
+            .catch(e => console.log(e));
     }
 
     renderActions(item) {
@@ -119,9 +112,15 @@ export default class CheckList extends Component {
         this.loadItems();
     }
 
-    handleEditItemModal() {
+    handleEditItemModal(item) {
         let showModal = !this.state.showEditItemModal;
-        this.setState({ showAddItemModal: showModal });
+        let itemId = showModal ? item.pk : null;
+
+        this.setState({
+            itemEditingId: itemId,
+            showEditItemModal: showModal
+        });
+
         this.loadItems();
     }
 
@@ -130,9 +129,8 @@ export default class CheckList extends Component {
             return (
                     <ListGroupItem key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
-                        <FormInput type="text" className="change-title" onChange={this.updateTitle(item)} value={ item.title } />
                         <span className="float-right">
-                            <Button size="sm" className="mr-2" theme="info" onClick={() => this.editItem(item)}>
+                            <Button size="sm" className="mr-2" theme="info" onClick={() => this.handleEditItemModal(item)}>
                                 <FontAwesomeIcon icon={faEdit} />
                             </Button>
                             { this.renderActions(item) }
@@ -184,6 +182,7 @@ export default class CheckList extends Component {
                 </Container>
 
                 <AddItemModal open={this.state.showAddItemModal} handleAddItemModal={this.handleAddItemModal} />
+                <EditItemModal open={this.state.showEditItemModal} itemId={this.state.itemEditingId} handleEditItemModal={this.handleEditItemModal} />
             </div>
         );
     }

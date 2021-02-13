@@ -19,6 +19,7 @@ class EditItemModal extends Component {
 
         this.state = {
             open: this.props.open,
+            itemId: this.props.itemId,
             title: '',
             description: '',
             dueDate: '',
@@ -26,6 +27,23 @@ class EditItemModal extends Component {
             nonfieldError: '',
             showNonFieldError: false
         };
+    }
+
+    componentDidMount() {
+        this.loadItemData();
+    }
+
+    loadItemData() {
+        console.log(this.state.itemId);
+
+        // this.setState({
+        //     title: '',
+        //     description: '',
+        //     dueDate: '',
+        //     showTitleError: false,
+        //     nonfieldError: '',
+        //     showNonFieldError: false
+        // });
     }
 
     updateTitle = e => {
@@ -58,40 +76,40 @@ class EditItemModal extends Component {
             postData.due_date = this.state.dueDate;
         }
 
-        apiClient.post(`${config.API_URL}/items/`, postData)
-        .then(res => {
-            // reset add item form and close modal
-            this.setState({
-                title: '',
-                description: '',
-                dueDate: '',
-                showTitleError: false,
-                nonfieldError: '',
-                showNonFieldError: false
-            });
-            this.props.handleEditItemModal();
-        })
-        .catch(err => {
-            if (err.response) {
-                if (err.response.data.title) {
-                    this.setState({ showTitleError: true })
-                }
+        apiClient.post(`${config.API_URL}/items/${this.state.item.pk}`, postData)
+            .then(res => {
+                // reset add item form and close modal
+                this.setState({
+                    title: '',
+                    description: '',
+                    dueDate: '',
+                    showTitleError: false,
+                    nonfieldError: '',
+                    showNonFieldError: false
+                });
+                this.props.handleEditItemModal();
+            })
+            .catch(err => {
+                if (err.response) {
+                    if (err.response.data.title) {
+                        this.setState({ showTitleError: true })
+                    }
 
-                if (err.response.data.non_field_errors) {
-                    this.setState(() => ({
-                        showNonFieldError: true,
-                        nonFieldErrorMessage: err.response.data.non_field_errors
-                    }));
+                    if (err.response.data.non_field_errors) {
+                        this.setState(() => ({
+                            showNonFieldError: true,
+                            nonFieldErrorMessage: err.response.data.non_field_errors
+                        }));
+                    }
                 }
-            }
-        });
+            });
     }
 
     render() {
         return (
             <div>
                 <Modal open={this.props.open} onHide={this.props.handleEditItemModal}>
-                    <ModalHeader>Add Item</ModalHeader>
+                    <ModalHeader>Edit Item</ModalHeader>
                     <ModalBody>
                         <Form>
                             <FormGroup>
@@ -114,7 +132,7 @@ class EditItemModal extends Component {
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="primary" onClick={this.submitForm}>Add</Button>
+                        <Button variant="primary" onClick={this.submitForm}>Save</Button>
                         <Button variant="secondary" onClick={this.props.handleEditItemModal}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
