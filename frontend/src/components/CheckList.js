@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import apiClient from '../api';
 import config from "../config";
 import Navigation from './Navigation';
 import AddItemModal from './AddItemModal';
-import EditItemModal from './EditItemModal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlus, faRedo, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -29,7 +29,7 @@ export default class CheckList extends Component {
             items: [],
             showAddItemModal: false,
             showEditItemModal: false,
-            itemEditingId: null,
+            itemEditing: null,
         };
     }
 
@@ -114,10 +114,10 @@ export default class CheckList extends Component {
 
     handleEditItemModal(item) {
         let showModal = !this.state.showEditItemModal;
-        let itemId = showModal ? item.pk : null;
+        // item = showModal ? item : null;
 
         this.setState({
-            itemEditingId: itemId,
+            itemEditing: item,
             showEditItemModal: showModal
         });
 
@@ -130,9 +130,9 @@ export default class CheckList extends Component {
                     <ListGroupItem key={i}>
                         <span className={item.complete ? "strikethrough" : ""}>{ item.title }</span>
                         <span className="float-right">
-                            <Button size="sm" className="mr-2" theme="info" onClick={() => this.handleEditItemModal(item)}>
+                            <Link to={`/item/edit/${item.pk}`} className="mr-2 btn btn-info btn-sm">
                                 <FontAwesomeIcon icon={faEdit} />
-                            </Button>
+                            </Link>
                             { this.renderActions(item) }
                             <Button size="sm" className="mr-2" theme="danger" onClick={() => this.deleteItem(item)}>
                                 <FontAwesomeIcon icon={faTrash} />
@@ -181,8 +181,9 @@ export default class CheckList extends Component {
                     </Row>
                 </Container>
 
-                <AddItemModal open={this.state.showAddItemModal} handleAddItemModal={this.handleAddItemModal} />
-                <EditItemModal open={this.state.showEditItemModal} itemId={this.state.itemEditingId} handleEditItemModal={this.handleEditItemModal} />
+                <AddItemModal 
+                    open={this.state.showAddItemModal} 
+                    handleAddItemModal={this.handleAddItemModal} />
             </div>
         );
     }

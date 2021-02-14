@@ -6,9 +6,10 @@ class ProtectedRoute extends React.Component {
     render() {
         const Component = this.props.component;
         const isAuthenticated = localStorage.getItem('auth_token');
+        const params = this.props.computedMatch.params;
 
         return isAuthenticated ? (
-            <Component />
+            <Component params={params}/>
         ) : (
             <Redirect to={{ pathname: '/' }} />
         );
