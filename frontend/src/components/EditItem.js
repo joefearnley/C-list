@@ -19,12 +19,10 @@ class EditItem extends Component {
         super(props);
 
         this.state = {
-            item : {
-                id: null,
-                title: '',
-                description: '',
-                dueDate: '',
-            },
+            itemId: null,
+            title: '',
+            description: '',
+            dueDate: '',
             showTitleError: false,
             showNonFieldError: false
         };
@@ -38,15 +36,11 @@ class EditItem extends Component {
         const id = this.props.params.id;
         apiClient.get(`${config.API_URL}/items/${id}`)
             .then(res => {
-                console.log(res.data);
-
                 this.setState({
-                    item : {
-                        id: res.data.pk,
-                        title: res.data.title,
-                        description: res.data.description,
-                        dueDate: res.data.due_date
-                    }
+                    itemId: res.data.pk,
+                    title: res.data.title,
+                    description: res.data.description,
+                    dueDate: res.data.due_date,
                 });
             })
             .catch(err => console.log(err));
@@ -54,27 +48,17 @@ class EditItem extends Component {
 
     updateTitle = e => {
         this.setState({
-            item: {
-                title: e.target.value
-            },
+            title: e.target.value,
             showTitleError: false
         });
     }
 
     updateDescription = e => {
-        this.setState({ 
-            item : {
-                description: e.target.value 
-            }
-        });
+        this.setState({ description: e.target.value });
     }
 
     updateDueDate = e => {
-        this.setState({ 
-            item : {
-                dueDate: e.target.value 
-            }
-        });
+        this.setState({ dueDate: e.target.value });
     }
 
     cancel = e => {
@@ -94,7 +78,7 @@ class EditItem extends Component {
             postData.due_date = this.state.dueDate;
         }
 
-        apiClient.post(`${config.API_URL}/items/${this.item.id}`, postData)
+        apiClient.patch(`${config.API_URL}/items/${this.state.itemId}/`, postData)
             .then(res => {
                 this.props.history.push('/list');
             })
@@ -125,16 +109,16 @@ class EditItem extends Component {
                             <Form>
                                 <FormGroup>
                                     <label htmlFor="title">Title</label>
-                                    <FormInput invalid={ this.state.showTitleError } id="title" type="text" onChange={ this.updateTitle } value={ this.state.item.title || '' } />
+                                    <FormInput invalid={ this.state.showTitleError } id="title" type="text" onChange={ this.updateTitle } value={ this.state.title || '' } />
                                     <FormFeedback type="invalid">Please enter a title</FormFeedback>
                                 </FormGroup>
                                 <FormGroup>
                                     <label htmlFor="description">Description</label>
-                                    <FormInput id="description" type="text" onChange={ this.updateDescription } value={ this.state.item.description || '' } />
+                                    <FormInput id="description" type="text" onChange={ this.updateDescription } value={ this.state.description || '' } />
                                 </FormGroup>
                                 <FormGroup>
                                     <label htmlFor="due-date">Due Date</label>
-                                    <FormInput id="due-date" type="date" onChange={ this.updateDueDate } value={ this.state.item.dueDate || '' } />
+                                    <FormInput id="due-date" type="date" onChange={ this.updateDueDate } value={ this.state.dueDate || '' } />
                                     <FormFeedback type="invalid">Please enter a due date</FormFeedback>
                                 </FormGroup>
                             </Form>
