@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import apiClient from '../api';
 import config from '../config';
 import Navigation from './Navigation';
-import {
+import { 
     Container,
     Row,
     Col,
@@ -11,39 +11,21 @@ import {
     Form,
     FormGroup,
     FormInput,
-    FormFeedback
+    FormFeedback 
 } from "shards-react";
 
-class EditItem extends Component {
+class AddItem extends Component {
     constructor(props, context) {
         super(props);
 
         this.state = {
-            itemId: null,
             title: '',
             description: '',
             dueDate: '',
             showTitleError: false,
+            nonfieldError: '',
             showNonFieldError: false
         };
-    }
-
-    componentDidMount() {
-        this.loadItemData();
-    }
-
-    loadItemData() {
-        const id = this.props.params.id;
-        apiClient.get(`${config.API_URL}/items/${id}`)
-            .then(res => {
-                this.setState({
-                    itemId: res.data.pk,
-                    title: res.data.title,
-                    description: res.data.description,
-                    dueDate: res.data.due_date,
-                });
-            })
-            .catch(err => console.log(err));
     }
 
     updateTitle = e => {
@@ -53,7 +35,7 @@ class EditItem extends Component {
         });
     }
 
-    updateDescription = e => {
+    updateDesciption = e => {
         this.setState({ description: e.target.value });
     }
 
@@ -74,7 +56,7 @@ class EditItem extends Component {
             postData.due_date = this.state.dueDate;
         }
 
-        apiClient.patch(`${config.API_URL}/items/${this.state.itemId}/`, postData)
+        apiClient.post(`${config.API_URL}/items/`, postData)
             .then(res => {
                 this.props.history.push('/list');
             })
@@ -101,28 +83,29 @@ class EditItem extends Component {
                 <Container>
                     <Row className="justify-content-md-center">
                         <Col sm="8">
-                            <h3 className="mb-4">Edit Item</h3>
+                            <h3 className="mb-4">Add Item</h3>
                             <Form>
                                 <FormGroup>
                                     <label htmlFor="title">Title</label>
-                                    <FormInput invalid={ this.state.showTitleError } id="title" type="text" onChange={ this.updateTitle } value={ this.state.title || '' } />
+                                    <FormInput invalid={ this.state.showTitleError } id="title" type="text" onChange={this.updateTitle} />
                                     <FormFeedback type="invalid">Please enter a title</FormFeedback>
                                 </FormGroup>
                                 <FormGroup>
                                     <label htmlFor="description">Description</label>
-                                    <FormInput id="description" type="text" onChange={ this.updateDescription } value={ this.state.description || '' } />
+                                    <FormInput id="description" type="text" onChange={this.updateDescription} />
                                 </FormGroup>
                                 <FormGroup>
                                     <label htmlFor="due-date">Due Date</label>
-                                    <FormInput id="due-date" type="date" onChange={ this.updateDueDate } value={ this.state.dueDate || '' } />
+                                    <FormInput id="due-date" type="date" onChange={this.updateDueDate} />
                                     <FormFeedback type="invalid">Please enter a due date</FormFeedback>
                                 </FormGroup>
                             </Form>
                             <p className={this.state.showNonFieldError ? 'show-error' : 'hide-error'}>
                                 { this.state.nonfieldError }
                             </p>
-                            <Button className="mr-2" theme="primary" onClick={ this.submitForm }>Save</Button>
-                            <Button className="mr-2" theme="primary" onClick={() => this.props.history.push('/list')}>Cancel</Button>
+
+                            <Button variant="primary" className="mr-2" onClick={this.submitForm}>Add</Button>
+                            <Button variant="secondary" onClick={() => this.props.history.push('/list')}>Cancel</Button>
                         </Col>
                     </Row>
                 </Container>
@@ -131,4 +114,4 @@ class EditItem extends Component {
     }
 }
 
-export default withRouter(EditItem);
+export default withRouter(AddItem);

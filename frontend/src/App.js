@@ -5,6 +5,7 @@ import Home from './components/Home';
 import CheckList from './components/CheckList';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
+import AddItem from './components/AddItem';
 import EditItem from './components/EditItem';
 import Account from './components/Account';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/login" exact component={Login} />
                 <Route path="/signup" exact component={Signup} />
                 <ProtectedRoute path="/list" exact component={CheckList} />
+                <ProtectedRoute path="/item/add/" exact component={AddItem} />
                 <ProtectedRoute path="/item/edit/:id" exact component={EditItem} />
                 <ProtectedRoute path="/account" exact component={Account} />
             </Switch>

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import apiClient from '../api';
 import config from "../config";
 import Navigation from './Navigation';
-import AddItemModal from './AddItemModal';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlus, faRedo, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -22,14 +21,9 @@ export default class CheckList extends Component {
         this.completeItem = this.completeItem.bind(this);
         this.unCompleteItem = this.unCompleteItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
-        this.handleAddItemModal = this.handleAddItemModal.bind(this);
-        this.handleEditItemModal = this.handleEditItemModal.bind(this);
 
         this.state = {
             items: [],
-            showAddItemModal: false,
-            showEditItemModal: false,
-            itemEditing: null,
         };
     }
 
@@ -106,24 +100,6 @@ export default class CheckList extends Component {
         );
     }
 
-    handleAddItemModal() {
-        let showModal = !this.state.showAddItemModal;
-        this.setState({ showAddItemModal: showModal });
-        this.loadItems();
-    }
-
-    handleEditItemModal(item) {
-        let showModal = !this.state.showEditItemModal;
-        // item = showModal ? item : null;
-
-        this.setState({
-            itemEditing: item,
-            showEditItemModal: showModal
-        });
-
-        this.loadItems();
-    }
-
     renderList() {
         return this.state.items.map((item, i) => {
             return (
@@ -171,19 +147,15 @@ export default class CheckList extends Component {
                             <h2>Your CheckList</h2>
                         </Col>
                         <Col sm="1">
-                            <Button theme="light" onClick={() => this.handleAddItemModal()}>
+                            <Link to={`/item/add/`} className="mr-2 btn btn-light btn-sm">
                                 <FontAwesomeIcon icon={faPlus} />
-                            </Button>
+                            </Link>
                         </Col>
                     </Row>
                     <Row className="justify-content-md-center">
                         { this.renderItems() }
                     </Row>
                 </Container>
-
-                <AddItemModal 
-                    open={this.state.showAddItemModal} 
-                    handleAddItemModal={this.handleAddItemModal} />
             </div>
         );
     }
