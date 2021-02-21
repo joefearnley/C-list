@@ -11,6 +11,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { alarm, list, settings } from 'ionicons/icons';
+import Home from './pages/Home';
 import Upcoming from './pages/Upcoming';
 import Items from './pages/Items';
 import Settings from './pages/Settings';
@@ -37,15 +38,17 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 const App: React.FC = () => (
+
   <IonApp>
-    { false ? (
+    { true ? (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
+            <Route path="/" component={Home} />
+            {/* <Route path="/" render={() => <Redirect to="/upcoming" />} exact={true} /> */}
             <Route path="/upcoming" component={Upcoming} exact={true} />
             <Route path="/items" component={Items} exact={true} />
             <Route path="/settings" component={Settings} />
-            <Route path="/" render={() => <Redirect to="/upcoming" />} exact={true} />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="upcoming" href="/upcoming">
