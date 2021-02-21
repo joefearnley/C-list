@@ -1,7 +1,6 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, 
   IonList, IonItem, IonLabel } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import './Upcoming.css';
 
 const Upcoming: React.FC = () => {

@@ -1,0 +1,9 @@
+ion-content {
+    position: absolute;
+    top: 30%;
+    text-align: center;
+}
+
+h1, p {
+    color: #454545ff;
+}
