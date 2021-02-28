@@ -37,15 +37,15 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
+const App: React.FC = () => {
+  const authToken = localStorage.getItem('auth_token');
+  const isAuthenticated = authToken ? true : false;
 
   <IonApp>
-    { true ? (
+    { isAuthenticated ? (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/" component={Landing} />
-            {/* <Route path="/" render={() => <Redirect to="/upcoming" />} exact={true} /> */}
             <Route path="/upcoming" component={Upcoming} exact={true} />
             <Route path="/items" component={Items} exact={true} />
             <Route path="/settings" component={Settings} />
@@ -66,14 +66,15 @@ const App: React.FC = () => (
           </IonTabBar>
         </IonTabs>
       </IonReactRouter>
-    ) :(
+    ) : (
         <IonReactRouter>
+          <Route path="/" component={Landing} exact={true} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
         </IonReactRouter>
     )
     }
   </IonApp>
-);
+};
 
 export default App;

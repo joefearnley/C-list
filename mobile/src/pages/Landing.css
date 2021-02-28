@@ -1,9 +1,21 @@
-ion-content {
+.landing-page ion-content {
     position: absolute;
     top: 30%;
     text-align: center;
 }
 
-h1, p {
+.landing-page  h1, p {
     color: #454545ff;
+}
+
+.landing-page .sign-up {
+    margin-top: 60px;
+}
+
+.landing-page .sign-up a {
+    text-decoration: none;
+}
+
+.landing-page .log-in a {
+    text-decoration: none;
 }
