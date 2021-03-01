@@ -2,19 +2,9 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { alarm, list, settings } from 'ionicons/icons';
 import Landing from './pages/Landing';
-import Upcoming from './pages/Upcoming';
-import Items from './pages/Items';
-import Settings from './pages/Settings';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 
@@ -37,44 +27,14 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => {
-  const authToken = localStorage.getItem('auth_token');
-  const isAuthenticated = authToken ? true : false;
-
+const App: React.FC = () => (
   <IonApp>
-    { isAuthenticated ? (
-      <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route path="/upcoming" component={Upcoming} exact={true} />
-            <Route path="/items" component={Items} exact={true} />
-            <Route path="/settings" component={Settings} />
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="upcoming" href="/upcoming">
-              <IonIcon icon={alarm} />
-              <IonLabel>Upcoming</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="items" href="/items">
-              <IonIcon icon={list} />
-              <IonLabel>Items</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="settings" href="/settings">
-              <IonIcon icon={settings} />
-              <IonLabel>Settings</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </IonReactRouter>
-    ) : (
-        <IonReactRouter>
-          <Route path="/" component={Landing} exact={true} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-        </IonReactRouter>
-    )
-    }
+    <IonReactRouter>
+      <Route path="/" component={Landing} exact={true} />
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Signup} />
+    </IonReactRouter>
   </IonApp>
-};
+);
 
 export default App;
