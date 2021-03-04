@@ -15,11 +15,16 @@ import {
 } from '@ionic/react';
 import { personCircleOutline } from 'ionicons/icons'
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import config from '../../Config';
 import './Login.css';
 
 const Login: React.FC = () => {
+  const history = useHistory();
   const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [iserror, setIserror] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const login = () => {
     const api = axios.create({
