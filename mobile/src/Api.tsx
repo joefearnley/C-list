@@ -1,5 +1,4 @@
 import axios from 'axios';
-import config from './Config';
 
 const urls = {
     local: 'localhost:8000',
@@ -10,12 +9,8 @@ const host = window.location.hostname;
 const baseUrl = host === 'localhost' ? urls.local : urls.test;
 const apiUrl = `http://${baseUrl}/api/v1`;
 
-const config = {
-    API_URL: apiUrl
-};
-
 const defaultOptions = {
-    baseURL: config.API_URL,
+    baseURL: apiUrl,
     headers: {
         'Content-Type': 'application/json',
     }

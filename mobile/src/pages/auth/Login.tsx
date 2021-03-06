@@ -11,37 +11,43 @@ import {
   IonButton,
   IonRow,
   IonCol,
-  IonIcon
+  IonIcon,
+  IonAlert
 } from '@ionic/react';
 import { personCircleOutline } from 'ionicons/icons'
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import config from '../../Config';
+import api from '../../api';
 import './Login.css';
 
 const Login: React.FC = () => {
   const history = useHistory();
   const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
-  const [iserror, setIserror] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
+  const [loginErronMessage, setLoginErronMessage] = useState<string>();
+
+  console.log();
 
   const login = () => {
-    const api = axios.create({
-      baseURL: `https://`
-    });
+    api.post(`${api.defaults.baseURL}/token-auth/`, {
+      username,
+      password
+    })
+    .then(res => {
+      localStorage.setItem('auth_token', res.data.token);
+      history.push('/upcoming/');
+    })
+    .catch(err => {
+      if (err.response) {
+        for (const [key, value] of Object.entries(err.response.data)) {
+          console.log(`${key}: ${value}`);
+        }
 
-    api.post("/login", {
-        username,
-        password
-      })
-      .then(res => {
-          history.push('/upcoming/');
-       })
-       .catch(err => {
-          setMessage('Auth failure! Please create an account');
-          setIserror(true)
-       })
+        setLoginErronMessage('Error Logging in user. Please check username and password.');
+        setShowLoginAlert(true);
+      }
+    });
   }
 
   return (
@@ -92,6 +98,15 @@ const Login: React.FC = () => {
           </IonCol>
         </IonRow>
       </IonContent>
+      <IonAlert
+          isOpen={showLoginAlert}
+          onDidDismiss={() => setShowLoginAlert(false)}
+          cssClass='my-custom-class'
+          header={'Log in Error'}
+          subHeader={'Log in Error'}
+          message={loginErronMessage}
+          buttons={['OK']}
+        />
     </IonPage>
   );
 };
