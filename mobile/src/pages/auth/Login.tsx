@@ -15,7 +15,6 @@ import {
   IonAlert
 } from '@ionic/react';
 import { personCircleOutline } from 'ionicons/icons'
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import api from '../../api';
 import './Login.css';
@@ -26,8 +25,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>();
   const [showLoginAlert, setShowLoginAlert] = useState(false);
   const [loginErronMessage, setLoginErronMessage] = useState<string>();
-
-  console.log();
 
   const login = () => {
     api.post(`${api.defaults.baseURL}/token-auth/`, {
@@ -40,11 +37,7 @@ const Login: React.FC = () => {
     })
     .catch(err => {
       if (err.response) {
-        for (const [key, value] of Object.entries(err.response.data)) {
-          console.log(`${key}: ${value}`);
-        }
-
-        setLoginErronMessage('Error Logging in user. Please check username and password.');
+        setLoginErronMessage('Please check username and password.');
         setShowLoginAlert(true);
       }
     });
@@ -102,8 +95,7 @@ const Login: React.FC = () => {
           isOpen={showLoginAlert}
           onDidDismiss={() => setShowLoginAlert(false)}
           cssClass='my-custom-class'
-          header={'Log in Error'}
-          subHeader={'Log in Error'}
+          header={'Log In Failed'}
           message={loginErronMessage}
           buttons={['OK']}
         />
