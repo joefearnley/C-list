@@ -40,4 +40,4 @@ const Tabs: React.FC = () => {
   );
 };
 
-export default Items;
+export default Tabs;

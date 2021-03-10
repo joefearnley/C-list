@@ -1,6 +1,15 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, 
-  IonList, IonItem, IonLabel } from '@ionic/react';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonList,
+  IonItem,
+  IonLabel 
+} from '@ionic/react';
+import Tabs from '../components/Tabs';
 import './Upcoming.css';
 
 const Upcoming: React.FC = () => {
@@ -35,6 +44,9 @@ const Upcoming: React.FC = () => {
             </IonItem>
           </IonList>
       </IonContent>
+
+      <Tabs />
+
     </IonPage>
   );
 };
