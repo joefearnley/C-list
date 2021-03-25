@@ -7,7 +7,7 @@ import {
   IonToolbar,
   IonList,
   IonItem,
-  IonLabel 
+  IonLabel
 } from '@ionic/react';
 import Tabs from '../components/Tabs';
 import './Upcoming.css';
@@ -23,29 +23,21 @@ const Upcoming: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Upcoming</IonTitle>
+            <IonTitle >Upcoming</IonTitle>
           </IonToolbar>
         </IonHeader>
-          <IonList>
-            <IonItem>
-              <IonLabel>Pokémon Yellow</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Mega Man X</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>The Legend of Zelda</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Pac-Man</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Super Mario World</IonLabel>
-            </IonItem>
-          </IonList>
+        <IonList>
+          <IonItem>
+            <IonLabel>Item 1</IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>Item 2</IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>Item 2</IonLabel>
+          </IonItem>
+        </IonList>
       </IonContent>
-
-      <Tabs />
 
     </IonPage>
   );

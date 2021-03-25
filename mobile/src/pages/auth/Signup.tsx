@@ -65,7 +65,7 @@ const Signup: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Sign Up</IonTitle>
+            <IonTitle>Sign Up</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRow className="ion-padding">

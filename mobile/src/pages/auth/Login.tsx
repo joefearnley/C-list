@@ -53,7 +53,7 @@ const Login: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Log in</IonTitle>
+            <IonTitle>Log in</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRow className="ion-padding">
