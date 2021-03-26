@@ -268,3 +268,13 @@ class ItemListTest(APITestCase):
         items = Item.objects.all()
         self.assertEqual(len(items), 2)
 
+
+class UpcomingItemListTest(ItemListTest):
+    def setUp(self):
+        super(UpcomingItemListTest, self).setUp()
+
+    def test_can_read_upcoming_list(self):
+        self.client.force_authenticate(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        response = self.client.get('/api/v1/items/upcoming/')
