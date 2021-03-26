@@ -1,5 +1,5 @@
 import React from 'react';
-import {  IonContent, IonPage, IonIcon } from '@ionic/react';
+import { IonContent, IonPage, IonIcon } from '@ionic/react';
 import { checkmarkDone } from 'ionicons/icons'
 import './Landing.css';
 
