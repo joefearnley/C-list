@@ -25,8 +25,6 @@ class ItemListTest(APITestCase):
 
         self.due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
 
-    @classmethod
-    def setUpTestData(self):
         self.create_item('Clean Pool','Clean the Pool', self.due_date)
         self.create_item('Clean Bathroom', 'Clean the Bathroom', self.due_date)
 
@@ -280,8 +278,8 @@ class ItemListTest(APITestCase):
 
 
 class UpcomingItemListTest(ItemListTest):
-    def setUp(self, False):
-        super(UpcomingItemListTest, self).setUp(False)
+    def setUp(self):
+        super(UpcomingItemListTest, self).setUp()
 
     def test_can_read_upcoming_list(self):
         self.client.force_authenticate(user=self.user)
