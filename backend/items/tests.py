@@ -25,9 +25,19 @@ class ItemListTest(APITestCase):
 
         self.due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
 
-        Item.objects.create(title='Clean Pool', description='Clean the Pool', user=self.user, due_date=self.due_date)
-        Item.objects.create(title='Clean Bathroom', description='Clean the Bathroom', user=self.user,
-                            due_date=self.due_date)
+    @classmethod
+    def setUpTestData(self):
+        self.create_item('Clean Pool','Clean the Pool', self.due_date)
+        self.create_item('Clean Bathroom', 'Clean the Bathroom', self.due_date)
+
+    def create_item(self, title, description, due_date=None, complete=False):
+        Item.objects.create(
+            title=title,
+            description=description,
+            user=self.user,
+            due_date=due_date,
+            complete=complete
+        )
 
     def test_cannot_view_itemlist_if_not_authorized(self):
         response = self.client.get('/api/v1/items/')
@@ -270,11 +280,30 @@ class ItemListTest(APITestCase):
 
 
 class UpcomingItemListTest(ItemListTest):
-    def setUp(self):
-        super(UpcomingItemListTest, self).setUp()
+    def setUp(self, False):
+        super(UpcomingItemListTest, self).setUp(False)
 
     def test_can_read_upcoming_list(self):
         self.client.force_authenticate(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
+        # we are already are creating two items in the set up
+        # create a couple more, one without a due date
+        item3 = self.create_item('Clean Kitchen', 'Clean the Kitchen', (datetime.datetime.now() + datetime.timedelta(days=1)))
+        item4 = self.create_item('Clean Bedroom', 'Clean the Bedroom', (datetime.datetime.now() + datetime.timedelta(days=2)))
+        item5 = self.create_item('Clean Bike', 'Clean the Bike')
+
         response = self.client.get('/api/v1/items/upcoming/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 4)
+
+    def test_cannot_read_upcoming_list_for_another_user(self):
+        pass
+
+    def test_no_upcoming_items_show_when_nothing_is_upcoming(self):
+        pass
+
+    def test_no_upcoming_items_are_completed(self):
+        pass
+
