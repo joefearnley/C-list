@@ -25,8 +25,8 @@ class ItemListTest(APITestCase):
 
         self.due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
 
-        self.create_item('Clean Pool','Clean the Pool', self.due_date)
-        self.create_item('Clean Bathroom', 'Clean the Bathroom', self.due_date)
+        # self.create_item('Clean Pool','Clean the Pool', self.due_date)
+        # self.create_item('Clean Bathroom', 'Clean the Bathroom', self.due_date)
 
     def create_item(self, title, description, due_date=None, complete=False):
         Item.objects.create(
