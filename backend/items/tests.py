@@ -7,36 +7,33 @@ import datetime
 
 
 class ItemListTest(APITestCase):
-    def setUp(self, seed_database=False):
-        self.username = 'joe'
-        self.password = 'secret'
-        self.email = 'joetest123@gmail.com'
-        self.user = User.objects.create(
-            username=self.username,
-            email=self.email,
+    def setUp(self):
+        self.default_user = User.objects.create(
+            username='joe',
+            email='joetest123@gmail.com',
             is_active=True
         )
 
-        self.user.set_password(self.password)
-        self.user.save()
+        self.default_user.set_password('secret')
+        self.default_user.save()
 
-        self.token = Token.objects.create(user=self.user)
+        self.token = Token.objects.create(user=self.default_user)
         self.token.save()
 
-        self.due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
+        self.default_due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
 
         self.item1 = Item.objects.create(
             title='Clean Pool',
             description='Clean the Pool',
-            user=self.user,
-            due_date=self.due_date
+            user=self.default_user,
+            due_date=self.default_due_date
         )
 
         self.item2 = Item.objects.create(
             title='Clean Bathroom',
             description='Clean the Bathroom',
-            user=self.user,
-            due_date=self.due_date
+            user=self.default_user,
+            due_date=self.default_due_date
         )
 
     def test_cannot_view_itemlist_if_not_authorized(self):
@@ -45,7 +42,7 @@ class ItemListTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_can_view_itemlist_if_authorized(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         response = self.client.get('/api/v1/items/')
@@ -60,12 +57,13 @@ class ItemListTest(APITestCase):
             is_active=True
         )
 
-        item = Item.objects.create(title='Clean Garage',
-                            description='Clean the Garage',
-                            user=temp_user,
-                            due_date=self.due_date)
+        item = Item.objects.create(
+            title='Clean Garage',
+            description='Clean the Garage',
+            user=temp_user,
+        )
 
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         response = self.client.get('/api/v1/items/')
@@ -84,7 +82,7 @@ class ItemListTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_can_add_item(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         post_data = {
             'title': 'Clean Garage',
@@ -120,19 +118,20 @@ class ItemListTest(APITestCase):
         response = self.client.get('/api/v1/items/%s/' % str(item.pk))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get('/api/v1/items/%s/' % str(item.pk))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_can_read_item(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
-        item = Item.objects.create(title='Clean Garage',
-                                   description='Clean the Garage',
-                                   user=self.user,
-                                   due_date=self.due_date)
+        item = Item.objects.create(
+            title='Clean Garage',
+            description='Clean the Garage',
+            user=self.default_user
+        )
 
         response = self.client.get('/api/v1/items/%s/' % str(item.pk))
 
@@ -175,7 +174,7 @@ class ItemListTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_update_item(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         item = Item.objects.get(title='Clean Pool')
@@ -191,7 +190,7 @@ class ItemListTest(APITestCase):
         self.assertEqual(response.data.get('description'), 'Please clean the pool and clean it now!')
 
     def test_can_complete_item(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         item = Item.objects.get(title='Clean Pool')
@@ -207,13 +206,14 @@ class ItemListTest(APITestCase):
         self.assertEqual(updated_item.complete, True)
 
     def test_can_uncomplete_item(self):
-        item = Item.objects.create(title='Wash Feet',
-                                   description='Wash yo Feet',
-                                   user=self.user,
-                                   complete=True,
-                                   due_date=self.due_date)
+        item = Item.objects.create(
+            title='Wash Feet',
+            description='Wash yo Feet',
+            user=self.default_user,
+            complete=True
+        )
 
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         patch_data = {
@@ -228,10 +228,11 @@ class ItemListTest(APITestCase):
         self.assertEqual(updated_item.complete, False)
 
     def test_cannot_delete_item_when_not_authenticated(self):
-        item = Item.objects.create(title='Clean Car',
-                                   description='Clean the Car',
-                                   user=self.user,
-                                   due_date=self.due_date)
+        item = Item.objects.create(
+            title='Clean Car',
+            description='Clean the Car',
+            user=self.default_user,
+        )
 
         response = self.client.delete('/api/v1/items/%s/' % str(item.pk))
 
@@ -247,10 +248,11 @@ class ItemListTest(APITestCase):
         temp_user_token = Token.objects.create(user=temp_user)
         temp_user_token.save()
 
-        item = Item.objects.create(title='Clean Car',
-                                   description='Clean the Car',
-                                   user=self.user,
-                                   due_date=self.due_date)
+        item = Item.objects.create(
+            title='Clean Car',
+            description='Clean the Car',
+            user=self.default_user,
+        )
 
         self.client.force_authenticate(user=temp_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + temp_user_token.key)
@@ -260,15 +262,16 @@ class ItemListTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_delete_item(self):
-        item = Item.objects.create(title='Clean Car',
-                                   description='Clean the Car',
-                                   user=self.user,
-                                   due_date=self.due_date)
+        item = Item.objects.create(
+            title='Clean Car',
+            description='Clean the Car',
+            user=self.default_user,
+        )
 
         items = Item.objects.all()
         self.assertEqual(len(items), 3)
 
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         response = self.client.delete('/api/v1/items/%s/' % str(item.pk))
@@ -284,14 +287,14 @@ class UpcomingItemListTest(ItemListTest):
         super(UpcomingItemListTest, self).setUp()
 
     def test_can_read_upcoming_list(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         # We already have two "upcoming" items created during setup. We'll create
         # another one with no due date to ensure it doesn't return it along with the others
         Item.objects.create(
             title='Clean Bike',
-            user=self.user
+            user=self.default_user
         )
 
         response = self.client.get('/api/v1/items/upcoming/')
@@ -309,16 +312,16 @@ class UpcomingItemListTest(ItemListTest):
         temp_user_item = Item.objects.create(
             title='Clean Garage',
             user=temp_user,
-            due_date=self.due_date
+            due_date=self.default_due_date
         )
 
         temp_user_item = Item.objects.create(
             title='Clean Fridge',
             user=temp_user,
-            due_date=self.due_date
+            due_date=self.default_due_date
         )
 
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(user=self.default_user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         response = self.client.get('/api/v1/items/upcoming/')
