@@ -330,8 +330,48 @@ class UpcomingItemListTest(ItemListTest):
         self.assertEqual(len(response.data), 2)
 
     def test_no_upcoming_items_show_when_nothing_is_upcoming(self):
-        pass
+        self.client.force_authenticate(user=self.default_user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # clear all items first
+        Item.objects.all().delete()
+
+        a_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=1)
+
+        Item.objects.create(
+            title='Clean Pool',
+            user=self.default_user,
+            due_date=a_week_ago
+        )
+
+        Item.objects.create(
+            title='Clean Bathroom',
+            user=self.default_user,
+            due_date=a_week_ago
+        )
+
+        Item.objects.create(
+            title='Clean Bike',
+            user=self.default_user
+        )
+
+        response = self.client.get('/api/v1/items/upcoming/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
 
     def test_no_upcoming_items_are_completed(self):
-        pass
+        self.client.force_authenticate(user=self.default_user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
+        # clear all items first
+        Item.objects.all().delete()
+
+        Item.objects.create(title='Clean Pool',user=self.default_user)
+        Item.objects.create(title='Clean Bathroom',user=self.default_user)
+        Item.objects.create(title='Clean Bike',user=self.default_user)
+
+        response = self.client.get('/api/v1/items/upcoming/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
