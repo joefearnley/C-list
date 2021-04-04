@@ -22,19 +22,21 @@ class ItemListTest(APITestCase):
 
         self.default_due_date = datetime.datetime.now() + datetime.timedelta(weeks=1)
 
-        self.item1 = Item.objects.create(
+        Item.objects.create(
             title='Clean Pool',
             description='Clean the Pool',
             user=self.default_user,
             due_date=self.default_due_date
         )
 
-        self.item2 = Item.objects.create(
+        Item.objects.create(
             title='Clean Bathroom',
             description='Clean the Bathroom',
             user=self.default_user,
             due_date=self.default_due_date
         )
+
+        self.items = Item.objects.all()
 
     def test_cannot_view_itemlist_if_not_authorized(self):
         response = self.client.get('/api/v1/items/')
