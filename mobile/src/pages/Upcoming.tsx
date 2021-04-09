@@ -32,8 +32,6 @@ const Upcoming: React.FC = () => {
 
     api.get(`${api.defaults.baseURL}/items/upcoming`)
     .then(res => {
-      console.log(res.data);
-
       setItems(res.data);
     })
     .catch(err => {
@@ -44,35 +42,30 @@ const Upcoming: React.FC = () => {
     });
   }
 
-  const renderItems = () => {
+  const renderItemList = (items: any[]) => {
     if (items.length) {
       return (
-        {items.map(item => (
-        <IonItemSliding>
-          <IonItemOptions side="start">
-            <IonItemOption color="danger" onClick={() => console.log('share clicked')}>
-              <IonIcon icon={trash} /> Delete
-            </IonItemOption>
-          </IonItemOptions>
-
-          <IonItem>
-            <IonLabel>item.title</IonLabel>
-          </IonItem>
-
-          <IonItemOptions side="end">
-            <IonItemOption onClick={() => console.log('unread clicked')}>
-              <IonIcon icon={checkmark} /> Complete
-            </IonItemOption>
-          </IonItemOptions>
-        </IonItemSliding>
-        ))}
+        items.map(item => {
+          return (
+            <IonItemSliding>
+              <IonItemOptions side="start">
+                <IonItemOption color="danger" onClick={() => console.log('share clicked')}>
+                  <IonIcon icon={trash} /> Delete
+                </IonItemOption>
+              </IonItemOptions>
+              <IonItem>
+                <IonLabel>{item['title']}</IonLabel>
+              </IonItem>
+            </IonItemSliding>
+          )
+        })
       )
     }
 
     return (
       <p>No Upcoming Items</p>
     )
-  }
+  };
 
   return (
     <IonPage>
@@ -88,7 +81,7 @@ const Upcoming: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonList>
-          { renderItems() }
+          { renderItemList(items) }
         </IonList>
       </IonContent>
 
