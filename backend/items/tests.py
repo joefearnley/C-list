@@ -369,9 +369,26 @@ class UpcomingItemListTest(ItemListTest):
         # clear all items first
         Item.objects.all().delete()
 
-        Item.objects.create(title='Clean Pool',user=self.default_user)
-        Item.objects.create(title='Clean Bathroom',user=self.default_user)
-        Item.objects.create(title='Clean Bike',user=self.default_user)
+        Item.objects.create(
+            title='Clean Pool',
+            user=self.default_user,
+            due_date=self.default_due_date,
+            complete=True
+        )
+
+        Item.objects.create(
+            title='Clean Bathroom',
+            user=self.default_user,
+            due_date=self.default_due_date,
+            complete=True
+        )
+
+        Item.objects.create(
+            title='Clean Bike',
+            user=self.default_user,
+            due_date=self.default_due_date,
+            complete=True
+        )
 
         response = self.client.get('/api/v1/items/upcoming/')
 
