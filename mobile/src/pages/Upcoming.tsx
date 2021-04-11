@@ -23,7 +23,6 @@ const Upcoming: React.FC = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    console.log('fetching data.....');
     loadItems();
   }, []);
 
@@ -41,21 +40,21 @@ const Upcoming: React.FC = () => {
   }
 
   const deleteItem = (item: any) => {
-    api.delete(`${api.defaults.baseURL}/${item.pk}/items/delete`)
+    api.post(`${api.defaults.baseURL}/${item.pk}/items/delete`)
     .then(res => {
       console.log('item successfully deleled.');
       console.log(res.data);
     })
     .catch(err => {
       if (err.response) {
-        console.log(`got an error deleting item: ${item.pk}`);
+        console.log(`got an error deleting item - id: ${item.pk} | title: ${item.title}`);
         console.log(err.response);
       }
     });
   };
 
   const completeItem = (item: any) => {
-    api.patch(`${api.defaults.baseURL}/${item.pk}/items/`, {
+    api.post(`${api.defaults.baseURL}/${item.pk}/items/`, {
       complete: true
     })
     .then(res => {
@@ -64,7 +63,7 @@ const Upcoming: React.FC = () => {
     })
     .catch(err => {
       if (err.response) {
-        console.log(`got an error completing item: ${item.pk}`);
+        console.log(`got an error completing item - id: ${item.pk} | title: ${item.title}`);
         console.log(err.response);
       }
     });
