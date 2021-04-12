@@ -30,7 +30,6 @@ const Upcoming: React.FC = () => {
   }, []);
 
   const refreshItems = (event: CustomEvent<RefresherEventDetail>) => {
-
     api.get(`${api.defaults.baseURL}/items/upcoming`)
       .then(res => {
         setItems(res.data);
@@ -135,7 +134,6 @@ const Upcoming: React.FC = () => {
           { renderItemList(items) }
         </IonList>
       </IonContent>
-
     </IonPage>
   );
 };
