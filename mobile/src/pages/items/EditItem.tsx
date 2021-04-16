@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   IonContent,
   IonHeader,
@@ -15,32 +15,42 @@ import {
   IonAlert
 } from '@ionic/react';
 import { personCircleOutline } from 'ionicons/icons'
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import api from '../../api';
-import './Login.css';
+import './EditItem.css';
 
-const Login: React.FC = () => {
+const EditItem: React.FC = () => {
   const history = useHistory();
-  const [username, setUsername] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [showLoginAlert, setShowLoginAlert] = useState(false);
-  const [loginErronMessage, setLoginErronMessage] = useState<string>();
+  const [title, setTitle] = useState<string>();
+  const [description, setDescription] = useState<string>();
+  const [date, setDate] = useState<string>();
+  const { itemId } = useParams();
 
-  const login = () => {
-    api.post(`${api.defaults.baseURL}/token-auth/`, {
-      username,
-      password
-    })
+  useEffect(() => {
+    loadItem();
+
+    console.log(itemId);
+  }, []);
+
+  const loadItem = () => {
+    api.get(`${api.defaults.baseURL}/items/${itemId}/`)
     .then(res => {
-      localStorage.setItem('auth_token', res.data.token);
-      history.push('/upcoming/');
+      console.log(res.data);
+      setItem(res.data);
     })
     .catch(err => {
       if (err.response) {
-        setLoginErronMessage('Please check username and password.');
-        setShowLoginAlert(true);
+        console.log('error loading item data');
       }
     });
+  }
+
+  const save = () => {
+
+  }
+
+  const setTitle = (title: string) => {
+    = title;
   }
 
   return (
@@ -48,7 +58,7 @@ const Login: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle>Log in</IonTitle>
+            <IonTitle>edti </IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRow className="ion-padding">
@@ -63,7 +73,7 @@ const Login: React.FC = () => {
           <IonCol>
             <IonItem>
               <IonLabel position="fixed">Username</IonLabel>
-              <IonInput type="text" value={username} onIonChange={e => setUsername(e.detail.value!)}></IonInput>
+              <IonInput type="text" value={title} onIonChange={e => setUsername(e.detail.value!)}></IonInput>
             </IonItem>
           </IonCol>
         </IonRow>

@@ -8,6 +8,7 @@ import Landing from './pages/Landing';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import Upcoming from './pages/Upcoming';
+import EditItem from './pages/items/EditItem';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,6 +36,8 @@ const App: React.FC = () => (
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/upcoming" component={Upcoming} />
+
+      <Route path="/items/:id" component={EditItem} />
     </IonReactRouter>
   </IonApp>
 );

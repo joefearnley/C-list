@@ -98,7 +98,7 @@ const Upcoming: React.FC = () => {
                   <IonIcon icon={trash} /> Delete
                 </IonItemOption>
               </IonItemOptions>
-              <IonItem>
+              <IonItem routerLink={`/items/edit/${item['pk']}`}>
                 <IonLabel>{item['title']}</IonLabel>
               </IonItem>
               <IonItemOptions side="end">
