@@ -21,15 +21,15 @@ import './EditItem.css';
 
 const EditItem: React.FC = () => {
   const history = useHistory();
-  const [title, setTitle] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const [date, setDate] = useState<string>();
-  const { itemId } = useParams();
+  const [ item, setItem ] = useState({});
+  // const [title, setTitle] = useState<string>();
+  // const [description, setDescription] = useState<string>();
+  // const [date, setDate] = useState<string>();
+  let { itemId } = useParams();
 
   useEffect(() => {
-    loadItem();
-
     console.log(itemId);
+    loadItem();
   }, []);
 
   const loadItem = () => {
@@ -46,11 +46,33 @@ const EditItem: React.FC = () => {
   }
 
   const save = () => {
+    api.post(`${api.defaults.baseURL}/items/${itemId}/`, {
+      title: item.title,
+      description: item.description,
+      duedate: item.duedate
+    })
+    .then(res => {
+      console.log(res.data);
 
+      // return to previous screen
+    })
+    .catch(err => {
+      if (err.response) {
+        console.log('error loading item data');
+      }
+    });
   }
 
   const setTitle = (title: string) => {
-    = title;
+    item.title = title;
+  }
+
+  const setDescription = (description: string) => {
+    item.description = description;
+  }
+
+  const setDueDate = (dueDate: string) => {
+    item.due_date = dueDate;
   }
 
   return (
@@ -73,7 +95,7 @@ const EditItem: React.FC = () => {
           <IonCol>
             <IonItem>
               <IonLabel position="fixed">Username</IonLabel>
-              <IonInput type="text" value={title} onIonChange={e => setUsername(e.detail.value!)}></IonInput>
+              <IonInput type="text" value={item.title} onIonChange={e => setTitle(e.detail.value!)}></IonInput>
             </IonItem>
           </IonCol>
         </IonRow>
@@ -81,31 +103,18 @@ const EditItem: React.FC = () => {
           <IonCol>
             <IonItem>
               <IonLabel position="fixed">Password</IonLabel>
-              <IonInput type="password" value={password} onIonChange={e => setPassword(e.detail.value!)}></IonInput>
+              <IonInput type="password" value={item.description} onIonChange={e => setDescription(e.detail.value!)}></IonInput>
             </IonItem>
           </IonCol>
         </IonRow>
         <IonRow className="ion-padding">
           <IonCol>
-            <IonButton expand="block" onClick={login}>Log in</IonButton>
-          </IonCol>
-        </IonRow>
-        <IonRow className="ion-padding">
-          <IonCol>
-            <p>Don't have an account? <a href="/sigup">Sign Up</a></p>
+            <IonButton expand="block" onClick={save}>Save</IonButton>
           </IonCol>
         </IonRow>
       </IonContent>
-      <IonAlert
-          isOpen={showLoginAlert}
-          onDidDismiss={() => setShowLoginAlert(false)}
-          cssClass='my-custom-class'
-          header={'Log In Failed'}
-          message={loginErronMessage}
-          buttons={['OK']}
-        />
     </IonPage>
   );
 };
 
-export default Login;
+export default EditItem;
