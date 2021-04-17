@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import {
   IonApp,
 } from '@ionic/react';
@@ -29,17 +29,27 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <Route path="/" component={Landing} exact={true} />
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={Signup} />
-      <Route path="/upcoming" component={Upcoming} />
+const App: React.FC = () => {
 
-      <Route path="/items/:id" component={EditItem} />
-    </IonReactRouter>
-  </IonApp>
-);
+  const authToken = localStorage.getItem('auth_token');
+  const isAuthenticated = authToken ? true : false;
+
+  return (
+    <IonApp>
+      return { isAuthenticated ? (
+        <IonReactRouter>
+          <Route path="/upcoming" component={Upcoming} />
+          <Route path="/items/:id" component={EditItem} />
+        </IonReactRouter>
+      ) : (
+        <IonReactRouter>
+          <Route path="/" component={Landing} exact={true} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+        </IonReactRouter>
+      )}
+    </IonApp>
+  )
+};
 
 export default App;

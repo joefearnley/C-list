@@ -12,7 +12,7 @@ import {
   IonRow,
   IonCol,
   IonIcon,
-  IonAlert
+  IonDatetime
 } from '@ionic/react';
 import { personCircleOutline } from 'ionicons/icons'
 import { useHistory, useParams } from 'react-router-dom';
@@ -21,16 +21,17 @@ import './EditItem.css';
 
 const EditItem: React.FC = () => {
   const history = useHistory();
-  const [ item, setItem ] = useState({});
-  // const [title, setTitle] = useState<string>();
-  // const [description, setDescription] = useState<string>();
-  // const [date, setDate] = useState<string>();
-  let { itemId } = useParams();
+  const [ item, setItem ] = useState({
+    title: '',
+    description: '',
+    due_date: ''
+  });
+  const { itemId } = useParams();
 
   useEffect(() => {
     console.log(itemId);
     loadItem();
-  }, []);
+  }, [itemId]);
 
   const loadItem = () => {
     api.get(`${api.defaults.baseURL}/items/${itemId}/`)
@@ -41,6 +42,7 @@ const EditItem: React.FC = () => {
     .catch(err => {
       if (err.response) {
         console.log('error loading item data');
+        console.log(err.response);
       }
     });
   }
@@ -49,11 +51,12 @@ const EditItem: React.FC = () => {
     api.post(`${api.defaults.baseURL}/items/${itemId}/`, {
       title: item.title,
       description: item.description,
-      duedate: item.duedate
+      due_date: item.due_date
     })
     .then(res => {
+      console.log('item updated....return to previous screen');
       console.log(res.data);
-
+      history.push('/upcoming/');
       // return to previous screen
     })
     .catch(err => {
@@ -80,7 +83,7 @@ const EditItem: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle>edti </IonTitle>
+            <IonTitle>Edit Item</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRow className="ion-padding">
@@ -94,7 +97,7 @@ const EditItem: React.FC = () => {
         <IonRow className="ion-padding-horizontal">
           <IonCol>
             <IonItem>
-              <IonLabel position="fixed">Username</IonLabel>
+              <IonLabel position="fixed">Title</IonLabel>
               <IonInput type="text" value={item.title} onIonChange={e => setTitle(e.detail.value!)}></IonInput>
             </IonItem>
           </IonCol>
@@ -102,8 +105,16 @@ const EditItem: React.FC = () => {
         <IonRow className="ion-padding-horizontal">
           <IonCol>
             <IonItem>
-              <IonLabel position="fixed">Password</IonLabel>
-              <IonInput type="password" value={item.description} onIonChange={e => setDescription(e.detail.value!)}></IonInput>
+              <IonLabel position="fixed">Description</IonLabel>
+              <IonInput type="text" value={item.description} onIonChange={e => setDescription(e.detail.value!)}></IonInput>
+            </IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow className="ion-padding-horizontal">
+          <IonCol>
+            <IonItem>
+              <IonLabel position="floating">Due Date</IonLabel>
+              <IonDatetime displayFormat="MM/DD/YYYY" min="1994-03-14" max="2012-12-09" value={item.due_date} onIonChange={e => setDueDate(e.detail.value!)}></IonDatetime>
             </IonItem>
           </IonCol>
         </IonRow>
