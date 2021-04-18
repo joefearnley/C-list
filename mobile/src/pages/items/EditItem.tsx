@@ -8,6 +8,7 @@ import {
   IonLabel,
   IonItem,
   IonInput,
+  IonTextarea,
   IonButton,
   IonRow,
   IonCol,
@@ -16,6 +17,7 @@ import {
 } from '@ionic/react';
 import { personCircleOutline } from 'ionicons/icons'
 import { useHistory, useParams } from 'react-router-dom';
+import { format } from "date-fns";
 import api from '../../api';
 import './EditItem.css';
 
@@ -26,17 +28,16 @@ const EditItem: React.FC = () => {
     description: '',
     due_date: ''
   });
-  const { itemId } = useParams();
+
+  const { id } = useParams<{id?: string}>();
 
   useEffect(() => {
-    console.log(itemId);
     loadItem();
-  }, [itemId]);
+  }, []);
 
   const loadItem = () => {
-    api.get(`${api.defaults.baseURL}/items/${itemId}/`)
+    api.get(`${api.defaults.baseURL}/items/${id}/`)
     .then(res => {
-      console.log(res.data);
       setItem(res.data);
     })
     .catch(err => {
@@ -48,20 +49,18 @@ const EditItem: React.FC = () => {
   }
 
   const save = () => {
-    api.post(`${api.defaults.baseURL}/items/${itemId}/`, {
+    api.patch(`${api.defaults.baseURL}/items/${id}/`, {
       title: item.title,
       description: item.description,
       due_date: item.due_date
     })
     .then(res => {
-      console.log('item updated....return to previous screen');
-      console.log(res.data);
       history.push('/upcoming/');
-      // return to previous screen
     })
     .catch(err => {
       if (err.response) {
-        console.log('error loading item data');
+        console.log('error saving item data');
+        console.log(err.response.data);
       }
     });
   }
@@ -75,7 +74,7 @@ const EditItem: React.FC = () => {
   }
 
   const setDueDate = (dueDate: string) => {
-    item.due_date = dueDate;
+    item.due_date = format(new Date(dueDate), "yyyy-MM-dd");
   }
 
   return (
@@ -106,15 +105,15 @@ const EditItem: React.FC = () => {
           <IonCol>
             <IonItem>
               <IonLabel position="fixed">Description</IonLabel>
-              <IonInput type="text" value={item.description} onIonChange={e => setDescription(e.detail.value!)}></IonInput>
+              <IonTextarea rows={5} value={item.description} onIonChange={e => setDescription(e.detail.value!)}></IonTextarea>
             </IonItem>
           </IonCol>
         </IonRow>
         <IonRow className="ion-padding-horizontal">
           <IonCol>
             <IonItem>
-              <IonLabel position="floating">Due Date</IonLabel>
-              <IonDatetime displayFormat="MM/DD/YYYY" min="1994-03-14" max="2012-12-09" value={item.due_date} onIonChange={e => setDueDate(e.detail.value!)}></IonDatetime>
+              <IonLabel position="fixed">Due Date</IonLabel>
+              <IonDatetime displayFormat="MM/DD/YYYY" value={item.due_date} onIonChange={e => setDueDate(e.detail.value!)}></IonDatetime>
             </IonItem>
           </IonCol>
         </IonRow>

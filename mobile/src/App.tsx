@@ -39,7 +39,7 @@ const App: React.FC = () => {
       return { isAuthenticated ? (
         <IonReactRouter>
           <Route path="/upcoming" component={Upcoming} />
-          <Route path="/items/:id" component={EditItem} />
+          <Route path="/items/edit/:id" component={EditItem} />
         </IonReactRouter>
       ) : (
         <IonReactRouter>
