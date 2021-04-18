@@ -5,6 +5,8 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  IonButtons,
+  IonButton,
   IonList,
   IonItem,
   IonLabel,
@@ -17,7 +19,7 @@ import {
 } from '@ionic/react';
 import { RefresherEventDetail } from '@ionic/core';
 // import Tabs from '../components/Tabs';
-import { checkmark, trash } from 'ionicons/icons'
+import { checkmark, trash, add } from 'ionicons/icons'
 import api from '../api';
 import './Upcoming.css';
 
@@ -128,6 +130,11 @@ const Upcoming: React.FC = () => {
         <IonHeader collapse="condense">
           <IonToolbar color="primary">
             <IonTitle>Upcoming</IonTitle>
+            <IonButtons slot="end">
+              <IonButton href="/items/add">
+                <IonIcon icon={add} />
+              </IonButton>
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonList>
