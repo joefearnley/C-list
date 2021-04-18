@@ -45,9 +45,14 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Log in</IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
-          <IonToolbar color="primary">
+          <IonToolbar>
             <IonTitle>Log in</IonTitle>
           </IonToolbar>
         </IonHeader>

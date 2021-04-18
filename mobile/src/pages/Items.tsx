@@ -135,7 +135,7 @@ const Upcoming: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonList>
-          { renderItemList(items) }
+        { renderItemList(items) }
         </IonList>
       </IonContent>
     </IonPage>
