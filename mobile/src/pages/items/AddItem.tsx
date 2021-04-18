@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
   IonContent,
   IonHeader,
@@ -14,36 +14,21 @@ import {
   IonCol,
   IonDatetime
 } from '@ionic/react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { format } from "date-fns";
 import api from '../../api';
 import './EditItem.css';
 
 const EditItem: React.FC = () => {
   const history = useHistory();
-  const [ item, setItem ] = useState({
+  const [ item ] = useState({
     title: '',
     description: '',
     due_date: ''
   });
 
-  const { id } = useParams<{id?: string}>();
-
-  useEffect(() => {
-    api.get(`${api.defaults.baseURL}/items/${id}/`)
-    .then(res => {
-      setItem(res.data);
-    })
-    .catch(err => {
-      if (err.response) {
-        console.log('error loading item data');
-        console.log(err.response);
-      }
-    });
-  }, [id]);
-
   const save = () => {
-    api.patch(`${api.defaults.baseURL}/items/${id}/`, {
+    api.post(`${api.defaults.baseURL}/items/`, {
       title: item.title,
       description: item.description,
       due_date: item.due_date
@@ -76,7 +61,7 @@ const EditItem: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar color="primary">
-            <IonTitle>Edit Item</IonTitle>
+            <IonTitle>Add Item</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRow className="ion-padding-horizontal">

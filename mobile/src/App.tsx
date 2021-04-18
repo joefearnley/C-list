@@ -9,6 +9,7 @@ import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import Upcoming from './pages/Upcoming';
 import EditItem from './pages/items/EditItem';
+import AddItem from './pages/items/AddItem';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -39,6 +40,7 @@ const App: React.FC = () => {
       return { isAuthenticated ? (
         <IonReactRouter>
           <Route path="/upcoming" component={Upcoming} />
+          <Route path="/items/add" component={AddItem} />
           <Route path="/items/edit/:id" component={EditItem} />
         </IonReactRouter>
       ) : (
