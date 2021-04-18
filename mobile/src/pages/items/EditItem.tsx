@@ -77,13 +77,10 @@ const EditItem: React.FC = () => {
     <IonPage>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/" />
-          </IonButtons>
-          <IonTitle>Back Button</IonTitle>
-        </IonToolbar>
           <IonToolbar color="primary">
+            <IonButtons slot="start">
+              <IonBackButton defaultHref="/" />
+            </IonButtons>
             <IonTitle>Edit Item</IonTitle>
           </IonToolbar>
         </IonHeader>
