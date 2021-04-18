@@ -18,7 +18,7 @@ import {
   IonRefresherContent
 } from '@ionic/react';
 import { RefresherEventDetail } from '@ionic/core';
-// import Tabs from '../components/Tabs';
+import Tabs from '../components/Tabs';
 import { checkmark, trash, add } from 'ionicons/icons'
 import api from '../api';
 import './Upcoming.css';

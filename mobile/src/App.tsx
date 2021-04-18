@@ -1,14 +1,22 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect} from 'react-router-dom';
 import {
   IonApp,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonIcon,
+  IonLabel
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { alarm, list, settings } from 'ionicons/icons';
 import Landing from './pages/Landing';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import Items from './pages/Items';
 import Upcoming from './pages/Upcoming';
+import Settings from './pages/Settings';
 import EditItem from './pages/items/EditItem';
 import AddItem from './pages/items/AddItem';
 
@@ -40,11 +48,33 @@ const App: React.FC = () => {
     <IonApp>
       { isAuthenticated ? (
         <IonReactRouter>
-          <Route path="/upcoming" component={Upcoming} />
-          <Route path="/items" component={Items} />
           <Route path="/items/add" component={AddItem} />
           <Route path="/items/edit/:id" component={EditItem} />
+          <Redirect path="/signup" to="/items" exact />
+          <Redirect path="/login" to="/items" exact />
+          <IonTabs>
+            <IonRouterOutlet>
+                <Route path="/upcoming" component={Upcoming} exact={true} />
+                <Route path="/items" component={Items} exact={true} />
+                <Route path="/settings" component={Settings} exact={true} />
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+            <IonTabButton tab="upcoming" href="/upcoming">
+                <IonIcon icon={alarm} />
+                <IonLabel>Upcoming</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="items" href="/items">
+                <IonIcon icon={list} />
+                <IonLabel>Items</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settings} />
+                <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
         </IonReactRouter>
+        
       ) : (
         <IonReactRouter>
           <Route path="/" component={Landing} exact={true} />
