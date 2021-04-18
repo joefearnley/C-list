@@ -126,7 +126,7 @@ const Upcoming: React.FC = () => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
         <IonHeader collapse="condense">
-          <IonToolbar>
+          <IonToolbar color="primary">
             <IonTitle>Upcoming</IonTitle>
           </IonToolbar>
         </IonHeader>

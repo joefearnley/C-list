@@ -59,7 +59,7 @@ const Signup: React.FC = () => {
     <IonPage>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
-          <IonToolbar>
+          <IonToolbar color="primary">
             <IonTitle>Sign Up</IonTitle>
           </IonToolbar>
         </IonHeader>
