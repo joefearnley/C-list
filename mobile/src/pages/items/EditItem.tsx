@@ -51,7 +51,7 @@ const EditItem: React.FC = () => {
       due_date: item.due_date
     })
     .then(res => {
-      history.push('/upcoming/');
+      history.push('/items/');
     })
     .catch(err => {
       if (err.response) {
@@ -79,7 +79,7 @@ const EditItem: React.FC = () => {
         <IonHeader collapse="condense">
           <IonToolbar color="primary">
             <IonButtons slot="start">
-              <IonBackButton defaultHref="/" />
+              <IonBackButton defaultHref="/items" />
             </IonButtons>
             <IonTitle>Edit Item</IonTitle>
           </IonToolbar>

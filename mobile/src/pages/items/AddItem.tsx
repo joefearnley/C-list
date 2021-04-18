@@ -5,6 +5,8 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  IonButtons,
+  IonBackButton,
   IonLabel,
   IonItem,
   IonInput,
@@ -61,6 +63,9 @@ const EditItem: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar color="primary">
+            <IonButtons slot="start">
+              <IonBackButton defaultHref="/items" />
+            </IonButtons>
             <IonTitle>Add Item</IonTitle>
           </IonToolbar>
         </IonHeader>

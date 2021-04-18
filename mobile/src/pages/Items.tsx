@@ -1,50 +1,146 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
+  IonButtons,
+  IonButton,
   IonList,
   IonItem,
-  IonLabel 
+  IonLabel,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonIcon,
+  IonRefresher,
+  IonRefresherContent
 } from '@ionic/react';
-import './Items.css';
+import { RefresherEventDetail } from '@ionic/core';
+// import Tabs from '../components/Tabs';
+import { checkmark, trash, add } from 'ionicons/icons'
+import api from '../api';
+import './Upcoming.css';
 
-const Items: React.FC = () => {
+const Upcoming: React.FC = () => {
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    loadItems();
+  }, []);
+
+  const refreshItems = (event: CustomEvent<RefresherEventDetail>) => {
+    api.get(`${api.defaults.baseURL}/items/`)
+      .then(res => {
+        setItems(res.data);
+      })
+      .catch(err => {
+        if (err.response) {
+          console.log('got an error loading items');
+          console.log(err.response);
+        }
+      })
+      .then(function () {
+        event.detail.complete();
+      });
+  }
+
+  const loadItems = () => {
+    api.get(`${api.defaults.baseURL}/items/`)
+    .then(res => {
+      setItems(res.data);
+    })
+    .catch(err => {
+      if (err.response) {
+        console.log('error loading items:');
+        console.log(err.response);
+      }
+    });
+  }
+
+  const deleteItem = (item: any) => {
+    api.post(`${api.defaults.baseURL}/${item.pk}/items/delete`)
+    .then(res => {
+      console.log(res.data);
+    })
+    .catch(err => {
+      if (err.response) {
+        console.log(`got an error deleting item - id: ${item.pk} | title: ${item.title}`);
+        console.log(err.response);
+      }
+    });
+  };
+
+  const completeItem = (item: any) => {
+    api.patch(`${api.defaults.baseURL}/items/${item.pk}/`, {
+      complete: true
+    })
+    .then(res => {
+      loadItems();
+    })
+    .catch(err => {
+      if (err.response) {
+        console.log(err.response);
+      }
+    });
+  };
+
+  const renderItemList = (items: any[]) => {
+    if (items.length) {
+      return (
+        items.map((item, index) => {
+          return (
+            <IonItemSliding key={index}>
+              <IonItemOptions side="start">
+                <IonItemOption color="danger" onClick={e => deleteItem(item)}>
+                  <IonIcon icon={trash} /> Delete
+                </IonItemOption>
+              </IonItemOptions>
+              <IonItem routerLink={`/items/edit/${item['pk']}`}>
+                <IonLabel>{item['title']}</IonLabel>
+              </IonItem>
+              <IonItemOptions side="end">
+                <IonItemOption color="primary" onClick={e => completeItem(item)}>
+                  <IonIcon icon={checkmark} /> Complete
+                </IonItemOption>
+              </IonItemOptions>
+            </IonItemSliding>
+          )
+        })
+      )
+    }
+
+    return (
+      <div slot="fixed" className="ion-text-center no-upcoming-items">
+        <h4>Items</h4>
+      </div>
+    )
+  };
+
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Items</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen>
+        <IonRefresher slot="fixed" onIonRefresh={refreshItems}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Items</IonTitle>
+          <IonToolbar color="primary">
+            <IonTitle>Items</IonTitle>
+            <IonButtons slot="end">
+              <IonButton href="/items/add">
+                <IonIcon icon={add} />
+              </IonButton>
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonList>
-        <IonItem>
-          <IonLabel>Pokémon Yellow</IonLabel>
-        </IonItem>
-        <IonItem>
-          <IonLabel>Mega Man X</IonLabel>
-        </IonItem>
-        <IonItem>
-          <IonLabel>The Legend of Zelda</IonLabel>
-        </IonItem>
-        <IonItem>
-          <IonLabel>Pac-Man</IonLabel>
-        </IonItem>
-        <IonItem>
-          <IonLabel>Super Mario World</IonLabel>
-        </IonItem>
-      </IonList>
+          { renderItemList(items) }
+        </IonList>
       </IonContent>
     </IonPage>
   );
 };
 
-export default Items;
+export default Upcoming;

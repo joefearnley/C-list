@@ -7,6 +7,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import Landing from './pages/Landing';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
+import Items from './pages/Items';
 import Upcoming from './pages/Upcoming';
 import EditItem from './pages/items/EditItem';
 import AddItem from './pages/items/AddItem';
@@ -37,9 +38,10 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-      return { isAuthenticated ? (
+      { isAuthenticated ? (
         <IonReactRouter>
           <Route path="/upcoming" component={Upcoming} />
+          <Route path="/items" component={Items} />
           <Route path="/items/add" component={AddItem} />
           <Route path="/items/edit/:id" component={EditItem} />
         </IonReactRouter>
