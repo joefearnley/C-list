@@ -32,16 +32,21 @@ const EditItem: React.FC = () => {
   const { id } = useParams<{id?: string}>();
 
   useEffect(() => {
-    api.get(`${api.defaults.baseURL}/items/${id}/`)
-    .then(res => {
-      setItem(res.data);
-    })
-    .catch(err => {
-      if (err.response) {
-        console.log('error loading item data');
-        console.log(err.response);
-      }
-    });
+
+    const loadItem = () => {
+      api.get(`${api.defaults.baseURL}/items/${id}/`)
+      .then(res => {
+        setItem(res.data);
+      })
+      .catch(err => {
+        if (err.response) {
+          console.log('error loading item data');
+          console.log(err.response);
+        }
+      });
+    }
+
+    loadItem();
   }, [id]);
 
   const save = () => {
